@@ -1,0 +1,16 @@
+{% ckan_extends %}
+
+{# This is fix a bad ckan template that caused this error when you view an organization in the Web UI:
+
+    "Exception: menu item `organization_activity` need parameter `offset`" when you view an organization.
+
+This affected CKAN 2.4.0-2.4.2 only.
+See:
+  * https://github.com/datagovuk/ckanext-hierarchy/issues/9
+  * https://github.com/ckan/ckan/pull/2640
+#}
+{% block content_primary_nav %}
+  {{ h.build_nav_icon('organization_read', _('Datasets'), id=c.group_dict.name) }}
+  {{ h.build_nav_icon('organization_activity', _('Activity Stream'), id=c.group_dict.name, offset=0) }}
+  {{ h.build_nav_icon('organization_about', _('About'), id=c.group_dict.name) }}
+{% endblock %} 
