@@ -38,8 +38,11 @@ class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
 
     p.implements(p.IGroupForm, inherit=True)
 
-    # IGroupForm
+    # Plugin
+    def group_controller(self):
+        return 'organization'
 
+    # IGroupForm
     def group_types(self):
         return ('organization',)
 
