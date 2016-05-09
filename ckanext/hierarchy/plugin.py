@@ -38,13 +38,13 @@ class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
 
     p.implements(p.IGroupForm, inherit=True)
 
-    # Plugin
-    def group_controller(self):
-        return 'organization'
-
     # IGroupForm
+
     def group_types(self):
         return ('organization',)
+
+    def group_controller(self):
+        return 'organization'
 
     def setup_template_variables(self, context, data_dict):
         from pylons import tmpl_context as c
@@ -57,4 +57,3 @@ class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
         else:
             c.allowable_parent_groups = model.Group.all(
                                                 group_type='organization')
-
