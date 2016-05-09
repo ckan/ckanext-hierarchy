@@ -10,7 +10,7 @@ orgs    - List of organizations
 
 Example:
 
-  {% snippet 'organization/snippets/organization_tree.html', top_nodes=h.get_action('group_tree', {'type': 'organization'}) %}
+  {% snippet 'organization/snippets/organization_tree.html', top_nodes=h.group_tree(type_='organization') %}
 
 #}
 <ul>
