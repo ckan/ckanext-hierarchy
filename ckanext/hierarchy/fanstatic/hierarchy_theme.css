@@ -1,0 +1,33 @@
+
+ul.hierarchy-tree-top {
+     list-style-type: disc; 
+     background: none;
+     font-weight: 600;
+}
+
+ul.hierarchy-tree {
+     list-style-type: none; 
+     background: url(images/vline.png) repeat-y; 
+     margin: 0; padding: 0; 
+     font-weight: normal;
+}
+
+ul.hierarchy-tree {
+     margin-left: 10px; 
+} 
+
+ul.hierarchy-tree li { 
+     margin: 0; 
+     padding: 0 12px; 
+     line-height: 20px;
+     background: url(images/node.png) no-repeat;
+}
+
+
+ul.hierarchy-tree li.highlighted {
+     font-weight: 800;
+}
+
+ul.hierarchy-tree li:last-child {
+    background: #fff url(images/lastnode.png) no-repeat;
+}
