@@ -2,6 +2,8 @@
 
 {% block description %}
     {{ super() }}
-    <hr>
-    {% snippet 'organization/snippets/organization_tree.html', top_nodes=[h.group_tree_section(id_=c.group_dict.id, type_=c.group_dict.type)] %}    
+    {% if c.group_dict %} 
+        <hr>
+        {% snippet 'organization/snippets/organization_tree.html', top_nodes=[h.group_tree_section(id_=c.group_dict.id, type_=c.group_dict.type)] %}
+    {% endif %}    
 {% endblock %}
