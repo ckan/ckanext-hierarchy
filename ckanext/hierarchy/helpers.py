@@ -5,9 +5,9 @@ def group_tree(type_='organization'):
     return p.toolkit.get_action('group_tree')({}, {'type': type_})
 
 
-def group_tree_section(id_, type_='organization'):
+def group_tree_section(id_, type_='organization', include_parents=True, include_siblings=True):
     return p.toolkit.get_action('group_tree_section')(
-        {}, {'id': id_, 'type': type_})
+        {'include_parents':include_parents, 'include_siblings':include_siblings}, {'id': id_, 'type': type_,})
 
 def group_tree_parents(id_, type_='organization'):
      tree_node =  p.toolkit.get_action('organization_show')({},{'id':id_})

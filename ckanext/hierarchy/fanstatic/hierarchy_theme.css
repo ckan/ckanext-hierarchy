@@ -2,7 +2,7 @@
 ul.hierarchy-tree-top {
      list-style-type: disc; 
      background: none;
-     font-weight: 600;
+     font-weight: normal;
 }
 
 ul.hierarchy-tree {
@@ -24,8 +24,8 @@ ul.hierarchy-tree li {
 }
 
 
-ul.hierarchy-tree li.highlighted {
-     font-weight: 800;
+ul.hierarchy-tree-top li.highlighted, ul.hierarchy-tree li.highlighted {
+     font-weight: 700;
 }
 
 ul.hierarchy-tree li:last-child {
