@@ -1,11 +1,21 @@
 {% ckan_extends %}
 
+
+{% block page_heading %}
+  {{ super() }}
+  {% if c.group_dict.shortname %}
+   ({{ c.group_dict.shortname }})
+ {% endif %}
+
+{% endblock %}
+
 {% block organization_description %}
   {{ super() }}
-
+  
   {# TODO: Add JSTree #}
 
-  <div id="publisher-tree">
-     {% snippet 'organization/snippets/organization_tree.html', top_nodes=[h.group_tree_section(id_=c.group_dict.id, type_=c.group_dict.type)] %}
+  <div id="organization-tree">
+     {% snippet 'organization/snippets/organization_tree.html', top_nodes=[h.group_tree_section(id_=c.group_dict.id, type_=c.group_dict.type)], use_shortnames=False %}
   </div>
+
 {% endblock %}

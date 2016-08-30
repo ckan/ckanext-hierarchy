@@ -2,10 +2,25 @@ import ckan.plugins as p
 from ckanext.hierarchy.logic import action
 from ckanext.hierarchy import helpers
 from ckan.lib.plugins import DefaultOrganizationForm
+from ckan.lib.plugins import DefaultGroupForm
+import ckan.logic.schema as s
+
+import logging
+
+log = logging.getLogger(__name__)
 
 # This plugin is designed to work only these versions of CKAN
 p.toolkit.check_ckan_version(min_version='2.0')
 
+def custom_convert_from_extras(key, data, errors, context):
+
+    for data_key in data.keys():
+        if (data_key[0] == 'extras'):
+            data_value = data[data_key]
+            if(data_value['key'] == key[-1]):
+               data[key] = data_value['value']
+               del data[data_key]
+               break
 
 class HierarchyDisplay(p.SingletonPlugin):
 
@@ -33,6 +48,7 @@ class HierarchyDisplay(p.SingletonPlugin):
         return {'group_tree': helpers.group_tree,
                 'group_tree_section': helpers.group_tree_section,
                 'group_tree_parents': helpers.group_tree_parents,
+                'group_tree_get_shortname': helpers.group_tree_get_shortname
                 }
 
 
@@ -59,3 +75,61 @@ class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
         else:
             c.allowable_parent_groups = model.Group.all(
                                                 group_type='organization')
+
+    def form_to_db_schema_options(self, options):
+        ''' This allows us to select different schemas for different
+        purpose eg via the web interface or via the api or creation vs
+        updating. It is optional and if not available form_to_db_schema
+        should be used.
+        If a context is provided, and it contains a schema, it will be
+        returned.
+        '''
+        schema = options.get('context', {}).get('schema', None)
+        if schema:
+            return schema
+
+        if options.get('api'):
+            if options.get('type') == 'create':
+                return self.form_to_db_schema_api_create()
+            else:
+                return self.form_to_db_schema_api_update()
+        else:
+            return self.form_to_db_schema()
+
+    def form_to_db_schema_api_create(self):
+        schema = super(HierarchyForm, self).form_to_db_schema_api_create()
+        schema = self._modify_group_schema(schema)
+        return schema
+
+    def form_to_db_schema_api_update(self):
+        schema = super(HierarchyForm, self).form_to_db_schema_api_update()
+        schema = self._modify_group_schema(schema)
+        return schema
+
+    def form_to_db_schema(self):
+        schema = super(HierarchyForm, self).form_to_db_schema()
+        schema = self._modify_group_schema(schema)
+        return schema
+
+    def _modify_group_schema(self, schema):
+         #Import core converters and validators
+        _convert_to_extras = p.toolkit.get_converter('convert_to_extras')
+        _ignore_missing = p.toolkit.get_validator('ignore_missing')
+
+        default_validators = [_ignore_missing, _convert_to_extras]
+        schema.update({
+                       'shortname':default_validators
+                       })
+        return schema
+
+    def db_to_form_schema(self):
+        # Import core converters and validators
+        _convert_from_extras = p.toolkit.get_converter('convert_from_extras')
+        _ignore_missing = p.toolkit.get_validator('ignore_missing')
+        default_validators = [custom_convert_from_extras, _ignore_missing]
+
+        schema = { 'shortname':default_validators }
+        schema.update(s.default_show_group_schema())
+
+        return schema
+

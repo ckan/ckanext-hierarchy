@@ -10,7 +10,7 @@ orgs    - List of organizations
 
 Example:
 
-  {% snippet 'organization/snippets/organization_tree.html', top_nodes=h.group_tree(type_='organization') %}
+  {% snippet 'organization/snippets/organization_tree.html', top_nodes=h.group_tree(type_='organization'), use_shortnames=True %}
 
 #}
 
@@ -20,12 +20,21 @@ Example:
 
 <ul class="hierarchy-tree-top">
   {% for node in top_nodes recursive %}
+      {% set shortname = h.group_tree_get_shortname(node.name) %} 
+      {% set display_text = node.title %} 
+      {% if use_shortnames and shortname%}
+          {% set display_text = shortname %}
+      {% else %}
+          {% if shortname %}
+               {% set display_text = display_text + " (" + shortname + ")" %}
+          {% endif %}
+      {% endif %} 
       {% if node.highlighted %}
           <li class="highlighted" id="node_{{ node.name }}">
       {% else %}
           <li id="node_{{ node.name }}">
       {% endif %}
-      {% link_for node.title, controller='organization', action='read', id=node.name %}
+      {% link_for display_text, controller='organization', action='read', id=node.name %}
 
       {% if node.children %}
         <ul class="hierarchy-tree"> {{ loop(node.children) }} </ul>
