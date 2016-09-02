@@ -4,7 +4,7 @@
     <h1 class="heading">
         {% if organization.longname %}
            {{ organization.longname }} ({{ organization.title or organization.name }})
-        {% else %}}
+        {% else %}
             {{ organization.title or organization.name }}
         {% endif %}
         {% if organization.state == 'deleted' %}

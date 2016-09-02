@@ -14,6 +14,11 @@ p.toolkit.check_ckan_version(min_version='2.0')
 
 def custom_convert_from_extras(key, data, errors, context):
 
+    '''Converts values from extras, tailored for groups.'''
+
+    # Set to empty string to remove Missing objects
+    data[key] = ""
+
     to_remove = []
     for data_key in data.keys():
         if (data_key[0] == 'extras'):
