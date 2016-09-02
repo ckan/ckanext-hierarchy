@@ -48,7 +48,7 @@ class HierarchyDisplay(p.SingletonPlugin):
         return {'group_tree': helpers.group_tree,
                 'group_tree_section': helpers.group_tree_section,
                 'group_tree_parents': helpers.group_tree_parents,
-                'group_tree_get_shortname': helpers.group_tree_get_shortname
+                'group_tree_get_longname': helpers.group_tree_get_longname
                 }
 
 
@@ -118,7 +118,7 @@ class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
 
         default_validators = [_ignore_missing, _convert_to_extras]
         schema.update({
-                       'shortname':default_validators
+                       'longname':default_validators
                        })
         return schema
 
@@ -128,7 +128,7 @@ class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
         _ignore_missing = p.toolkit.get_validator('ignore_missing')
         default_validators = [custom_convert_from_extras, _ignore_missing]
 
-        schema = { 'shortname':default_validators }
+        schema = { 'longname':default_validators }
         schema.update(s.default_show_group_schema())
 
         return schema

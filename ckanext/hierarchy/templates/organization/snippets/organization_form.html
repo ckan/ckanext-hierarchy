@@ -1,7 +1,25 @@
 {% ckan_extends %}
 
 {% block basic_fields %}
-  {{ super() }}
+
+    {% set attrs = {'data-module': 'slug-preview-target'} %}
+    {{ form.input('title', label=_('Name'), id='field-name', placeholder=_('Main name, initials, acronym ...'), value=data.title, error=errors.title, classes=['control-medium'], attrs=attrs) }}
+    {{ form.input('longname', label=_('Long Name'), id='field-longname', placeholder=_('Long explanatory name'), value=data.longname, error=errors.longname, classes=['control-full']) }}
+
+    {# Perhaps these should be moved into the controller? #}
+    {% set prefix = h.url_for(controller='organization', action='read', id='') %}
+    {% set domain = h.url_for(controller='organization', action='read', id='', qualified=true) %}
+    {% set domain = domain|replace("http://", "")|replace("https://", "") %}
+    {% set attrs = {'data-module': 'slug-preview-slug', 'data-module-prefix': domain, 'data-module-placeholder': '<organization>'} %}
+
+    {{ form.prepend('name', label=_('URL'), prepend=prefix, id='field-url', placeholder=_('my-organization'), value=data.name, error=errors.name, attrs=attrs, is_required=true) }}
+
+    {{ form.markdown('description', label=_('Description'), id='field-description', placeholder=_('A little information about my organization...'), value=data.description, error=errors.description) }}
+
+    {% set is_upload = data.image_url and not data.image_url.startswith('http') %}
+    {% set is_url = data.image_url and data.image_url.startswith('http') %}
+
+    {{ form.image_upload(data, errors, is_upload_enabled=h.uploads_enabled(), is_url=is_url, is_upload=is_upload) }}
 
   <div class="control-group">
     <label class="control-label" for="field-parent">{{ _("Parent") }}</label>
@@ -16,5 +34,4 @@
     </div>
   </div>
 
- {{ form.input('shortname', label=_('Short Name'), id='field-shortname', placeholder=_('Initials, acronym...'), value=data.shortname, error=errors.shortname) }}
 {% endblock %}

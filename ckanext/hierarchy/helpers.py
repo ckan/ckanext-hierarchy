@@ -19,10 +19,11 @@ def group_tree_parents(id_, type_='organization'):
          return []
 
 
-def group_tree_get_shortname(id_, default="", type_='organization'):
+def group_tree_get_longname(id_, default="", type_='organization'):
      tree_node =  p.toolkit.get_action('organization_show')({},{'id':id_})
-     shortname = tree_node.get("shortname", default)
-     if not shortname:
+     longname = tree_node.get("longname", default)
+     if not longname:
          return default
-     return shortname
+     return longname
+
 

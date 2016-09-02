@@ -4,11 +4,11 @@
 {% if pkg %}
     {% set dataset = h.dataset_display_name(pkg) %}
     {% if pkg.organization %}
-      {% set organization = h.group_tree_get_shortname(pkg.organization.name, default=pkg.organization.title) %}
+      {% set organization = pkg.organization.title %}
       <li>{% link_for _('Organizations'), controller='organization', action='index' %}</li>
       {% set parent_list =  h.group_tree_parents(pkg.organization.name)  %}
       {% for parent_node in parent_list %}
-          <li>{% link_for  h.group_tree_get_shortname(parent_node.name, default=parent_node.title)|truncate(35), controller='organization', action='read', id=parent_node.name %}</li>
+          <li>{% link_for  parent_node.title|truncate(35), controller='organization', action='read', id=parent_node.name %}</li>
       {% endfor %}
       <li>{% link_for organization|truncate(30), controller='organization', action='read', id=pkg.organization.name %}</li>
     {% else %}
