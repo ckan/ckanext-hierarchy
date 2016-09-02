@@ -14,13 +14,19 @@ p.toolkit.check_ckan_version(min_version='2.0')
 
 def custom_convert_from_extras(key, data, errors, context):
 
+    to_remove = []
     for data_key in data.keys():
         if (data_key[0] == 'extras'):
             data_value = data[data_key]
-            if(data_value['key'] == key[-1]):
+            if( 'key' in data_value and data_value['key'] == key[-1]):
                data[key] = data_value['value']
-               del data[data_key]
+               to_remove.append(data_key)
                break
+    else:
+        return
+
+    for remove_key in to_remove:
+        del data[remove_key]
 
 class HierarchyDisplay(p.SingletonPlugin):
 
