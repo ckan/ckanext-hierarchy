@@ -66,6 +66,8 @@ class HierarchyDisplay(p.SingletonPlugin):
 class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
 
     p.implements(p.IGroupForm, inherit=True)
+    p.implements(p.IRoutes, inherit=True)
+
 
     # IGroupForm
 
@@ -144,3 +146,14 @@ class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
 
         return schema
 
+    # IRouter
+    # Redirect organization_read /organization/{id} to custom controller
+    # to include the datasets from the children organizations in the list
+
+    def before_map(self, map):
+        log.debug("\n BEFORE MAP \n")
+        map.connect('organization_read', '/organization/{id}',
+                     controller='ckanext.hierarchy.controller:HierarchyOrganizationController',
+                     action='read')
+        log.debug(str(map))
+        return map
