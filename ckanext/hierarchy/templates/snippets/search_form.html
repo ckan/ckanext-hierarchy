@@ -1,0 +1,9 @@
+{% ckan_extends %}
+
+
+{% block search_input %}
+     {{ super() }}
+     {% if include_children_option %}
+       {{ form.checkbox('_include_children', label="Include Sub-Organizations", checked=(c.include_children_selected), value=True, error=error) }}
+     {% endif %}
+{% endblock %}
