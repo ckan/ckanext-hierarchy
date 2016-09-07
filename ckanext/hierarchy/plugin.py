@@ -59,7 +59,8 @@ class HierarchyDisplay(p.SingletonPlugin):
         return {'group_tree': helpers.group_tree,
                 'group_tree_section': helpers.group_tree_section,
                 'group_tree_parents': helpers.group_tree_parents,
-                'group_tree_get_longname': helpers.group_tree_get_longname
+                'group_tree_get_longname': helpers.group_tree_get_longname,
+                'group_tree_highlight': helpers.group_tree_highlight
                 }
 
 

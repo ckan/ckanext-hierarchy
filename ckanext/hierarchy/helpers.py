@@ -18,7 +18,6 @@ def group_tree_parents(id_, type_='organization'):
      else:
          return []
 
-
 def group_tree_get_longname(id_, default="", type_='organization'):
      tree_node =  p.toolkit.get_action('organization_show')({},{'id':id_})
      longname = tree_node.get("longname", default)
@@ -26,4 +25,17 @@ def group_tree_get_longname(id_, default="", type_='organization'):
          return default
      return longname
 
+def group_tree_highlight(organizations, group_tree_list):
 
+    def traverse_highlight(group_tree, name_list):
+        if group_tree.get('name', "") in name_list:
+            group_tree['highlighted'] = True
+        for child in group_tree.get('children', []):
+            traverse_highlight(child, name_list)
+
+    selected_names = [ o.get('name',None) for o in organizations]
+    print(selected_names)
+
+    for group in group_tree_list:
+        traverse_highlight(group, selected_names)
+    return group_tree_list

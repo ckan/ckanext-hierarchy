@@ -2,14 +2,12 @@
 ul.hierarchy-tree-top {
      list-style-type: disc; 
      background: none;
-     font-weight: normal;
 }
 
 ul.hierarchy-tree {
      list-style-type: none; 
      background: url(images/vline.png) repeat-y; 
      margin: 0; padding: 0; 
-     font-weight: normal;
 }
 
 ul.hierarchy-tree {
@@ -23,11 +21,19 @@ ul.hierarchy-tree li {
      background: url(images/node.png) no-repeat;
 }
 
-
-ul.hierarchy-tree-top li.highlighted, ul.hierarchy-tree li.highlighted {
-     font-weight: 700;
-}
-
 ul.hierarchy-tree li:last-child {
     background: #fff url(images/lastnode.png) no-repeat;
 }
+
+ul.hierarchy-tree-top li a, ul.hierarchy-tree li a{
+     font-weight: 400;
+     color: hsl(194, 72%, 34%);
+}
+
+ul.hierarchy-tree-top li.highlighted > a, ul.hierarchy-tree li.highlighted > a {
+     font-weight: 700;
+     color: hsl(194, 90%, 30%);
+     /*text-decoration: underline;*/
+     text-shadow: 1px 1px #dddddd;
+}
+
