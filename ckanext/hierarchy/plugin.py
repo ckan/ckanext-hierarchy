@@ -38,6 +38,7 @@ class HierarchyDisplay(p.SingletonPlugin):
     p.implements(p.IConfigurer, inherit=True)
     p.implements(p.IActions, inherit=True)
     p.implements(p.ITemplateHelpers, inherit=True)
+    p.implements(p.IRoutes, inherit=True)
 
     # IConfigurer
 
@@ -60,92 +61,10 @@ class HierarchyDisplay(p.SingletonPlugin):
                 'group_tree_section': helpers.group_tree_section,
                 'group_tree_parents': helpers.group_tree_parents,
                 'group_tree_get_longname': helpers.group_tree_get_longname,
-                'group_tree_highlight': helpers.group_tree_highlight
+                'group_tree_highlight': helpers.group_tree_highlight,
+                'get_allowable_parent_groups': helpers.get_allowable_parent_groups,
                 }
 
-
-class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
-
-    p.implements(p.IGroupForm, inherit=True)
-    p.implements(p.IRoutes, inherit=True)
-
-
-    # IGroupForm
-
-    def group_types(self):
-        return ('organization',)
-
-    def group_controller(self):
-        return 'organization'
-
-    def setup_template_variables(self, context, data_dict):
-        from pylons import tmpl_context as c
-        model = context['model']
-        group_id = data_dict.get('id')
-        if group_id:
-            group = model.Group.get(group_id)
-            c.allowable_parent_groups = \
-                group.groups_allowed_to_be_its_parent(type='organization')
-        else:
-            c.allowable_parent_groups = model.Group.all(
-                                                group_type='organization')
-
-    def form_to_db_schema_options(self, options):
-        ''' This allows us to select different schemas for different
-        purpose eg via the web interface or via the api or creation vs
-        updating. It is optional and if not available form_to_db_schema
-        should be used.
-        If a context is provided, and it contains a schema, it will be
-        returned.
-        '''
-        schema = options.get('context', {}).get('schema', None)
-        if schema:
-            return schema
-
-        if options.get('api'):
-            if options.get('type') == 'create':
-                return self.form_to_db_schema_api_create()
-            else:
-                return self.form_to_db_schema_api_update()
-        else:
-            return self.form_to_db_schema()
-
-    def form_to_db_schema_api_create(self):
-        schema = super(HierarchyForm, self).form_to_db_schema_api_create()
-        schema = self._modify_group_schema(schema)
-        return schema
-
-    def form_to_db_schema_api_update(self):
-        schema = super(HierarchyForm, self).form_to_db_schema_api_update()
-        schema = self._modify_group_schema(schema)
-        return schema
-
-    def form_to_db_schema(self):
-        schema = super(HierarchyForm, self).form_to_db_schema()
-        schema = self._modify_group_schema(schema)
-        return schema
-
-    def _modify_group_schema(self, schema):
-         #Import core converters and validators
-        _convert_to_extras = p.toolkit.get_converter('convert_to_extras')
-        _ignore_missing = p.toolkit.get_validator('ignore_missing')
-
-        default_validators = [_ignore_missing, _convert_to_extras]
-        schema.update({
-                       'longname':default_validators
-                       })
-        return schema
-
-    def db_to_form_schema(self):
-        # Import core converters and validators
-        _convert_from_extras = p.toolkit.get_converter('convert_from_extras')
-        _ignore_missing = p.toolkit.get_validator('ignore_missing')
-        default_validators = [custom_convert_from_extras, _ignore_missing]
-
-        schema = { 'longname':default_validators }
-        schema.update(s.default_show_group_schema())
-
-        return schema
 
     # IRouter
     # Redirect organization_read /organization/{id} to custom controller
@@ -158,3 +77,24 @@ class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
                      action='read')
         log.debug(str(map))
         return map
+
+
+class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
+
+    p.implements(p.IGroupForm, inherit=True)
+
+
+    # IGroupForm
+
+    def group_types(self):
+        return ('organization',)
+
+    def group_controller(self):
+        return 'organization'
+
+    def setup_template_variables(self, context, data_dict):
+        from pylons import tmpl_context as c
+
+        group_id = data_dict.get('id')
+        c.allowable_parent_groups = helpers.get_allowable_parent_groups(group_id)
+
