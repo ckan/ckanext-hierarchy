@@ -27,7 +27,6 @@ def _children_name_list(children):
 
 class HierarchyOrganizationController(organization.OrganizationController):
     def _read(self, id, limit, group_type):
-        print"*******n\n\n HierarchyOrganizationController \n\n\n"
         c.include_children_selected = False
 
         if c.group_dict.get('is_organization'):

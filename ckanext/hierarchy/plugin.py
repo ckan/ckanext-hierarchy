@@ -71,11 +71,9 @@ class HierarchyDisplay(p.SingletonPlugin):
     # to include the datasets from the children organizations in the list
 
     def before_map(self, map):
-        log.debug("\n BEFORE MAP \n")
         map.connect('organization_read', '/organization/{id}',
                      controller='ckanext.hierarchy.controller:HierarchyOrganizationController',
                      action='read')
-        log.debug(str(map))
         return map
 
 
