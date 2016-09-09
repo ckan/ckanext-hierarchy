@@ -49,5 +49,3 @@ def get_allowable_parent_groups(group_id):
         allowable_parent_groups = model.Group.all(
             group_type='organization')
     return allowable_parent_groups
-
-

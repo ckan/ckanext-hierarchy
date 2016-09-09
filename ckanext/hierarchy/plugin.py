@@ -97,4 +97,3 @@ class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
 
         group_id = data_dict.get('id')
         c.allowable_parent_groups = helpers.get_allowable_parent_groups(group_id)
-
