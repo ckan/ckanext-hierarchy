@@ -4,7 +4,7 @@ from ckanext.hierarchy import helpers
 from ckan.lib.plugins import DefaultOrganizationForm
 from ckan.lib.plugins import DefaultGroupForm
 import ckan.logic.schema as s
-
+from routes.mapper import SubMapper
 import logging
 
 log = logging.getLogger(__name__)
@@ -71,10 +71,11 @@ class HierarchyDisplay(p.SingletonPlugin):
     # to include the datasets from the children organizations in the list
 
     def before_map(self, map):
-        map.connect('organization_read', '/organization/{id}',
-                     controller='ckanext.hierarchy.controller:HierarchyOrganizationController',
-                     action='read')
+        hierarchy_controller = 'ckanext.hierarchy.controller:HierarchyOrganizationController'
+        map.connect('organization_read', '/organization/{id:(?!list$|new$).*}',  controller=hierarchy_controller, action='read', ckan_icon='sitemap')
         return map
+
+
 
 
 class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
