@@ -1,16 +1,18 @@
 import sys
 
+import ckan.authz as authz
 import ckan.model as model
 import ckan.logic as logic
+
 import ckan.lib.maintain as maintain
-import helpers as hierarchy_helpers
-from ckan.common import c, _, g, request, OrderedDict
 import ckan.lib.helpers as h
-import ckan.authz as authz
 import ckan.lib.search as search
 
 import ckan.controllers.organization as organization
 
+from ckan.common import c, _, g, request, OrderedDict
+
+import helpers as hierarchy_helpers
 
 import logging
 
@@ -41,8 +43,8 @@ class HierarchyOrganizationController(organization.OrganizationController):
             # Search within subgroups
             if request.params.get('_include_children'):
                 c.include_children_selected = True
-                log.debug("Include Subgroups: " + str( request.params.get('_include_children')))
-                children = _children_name_list(hierarchy_helpers.group_tree_section( c.group_dict.get('id'), include_parents=False, include_siblings=False).get('children',[]))
+                log.debug("Include Subgroups: " + str(request.params.get('_include_children')))
+                children = _children_name_list(hierarchy_helpers.group_tree_section(c.group_dict.get('id'), include_parents=False, include_siblings=False).get('children',[]))
                 if(children):
                     if (len(q.strip())>0):
                         q += ' AND '
@@ -60,7 +62,12 @@ class HierarchyOrganizationController(organization.OrganizationController):
                     # if we drop support for those then we can delete this line.
                     c.group_admins = authz.get_group_or_org_admin_ids(c.group.id)
 
-                    page = self._get_page_number(request.params)
+
+                    get_page_number = getattr(self, "_get_page_number", None)
+                    if callable(get_page_number):
+                        page = self._get_page_number(request.params)
+                    else:
+                        page = h.get_page_number(request.params)
 
                     # most search operations should reset the page counter:
                     params_nopage = [(k, v) for k, v in request.params.items()
