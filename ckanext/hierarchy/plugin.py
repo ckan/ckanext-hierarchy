@@ -72,7 +72,9 @@ class HierarchyDisplay(p.SingletonPlugin):
     # Modify the search query to include the datasets from
     # the children organizations in the result list
     def before_search(self, search_params):
+
         ''' If include children selected the query string is modified '''
+
         def _children_name_list(children):
             name_list = []
             for child in children:
