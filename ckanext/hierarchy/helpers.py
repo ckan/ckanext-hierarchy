@@ -1,5 +1,6 @@
 import ckan.plugins as p
 import ckan.model as model
+from ckan.common import request
 
 def group_tree(type_='organization'):
     return p.toolkit.get_action('group_tree')({}, {'type': type_})
@@ -49,3 +50,10 @@ def get_allowable_parent_groups(group_id):
         allowable_parent_groups = model.Group.all(
             group_type='organization')
     return allowable_parent_groups
+
+def is_include_children_selected(fields):
+    include_children_selected = False
+    if request.params.get('include_children'):
+        include_children_selected = True
+    return include_children_selected
+

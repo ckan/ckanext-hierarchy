@@ -4,8 +4,9 @@ from ckanext.hierarchy import helpers
 from ckan.lib.plugins import DefaultOrganizationForm
 from ckan.lib.plugins import DefaultGroupForm
 import ckan.logic.schema as s
-from routes.mapper import SubMapper
+from ckan.common import c, request
 import logging
+import re
 
 log = logging.getLogger(__name__)
 
@@ -38,7 +39,7 @@ class HierarchyDisplay(p.SingletonPlugin):
     p.implements(p.IConfigurer, inherit=True)
     p.implements(p.IActions, inherit=True)
     p.implements(p.ITemplateHelpers, inherit=True)
-    p.implements(p.IRoutes, inherit=True)
+    p.implements(p.IPackageController, inherit=True)
 
     # IConfigurer
 
@@ -63,19 +64,67 @@ class HierarchyDisplay(p.SingletonPlugin):
                 'group_tree_get_longname': helpers.group_tree_get_longname,
                 'group_tree_highlight': helpers.group_tree_highlight,
                 'get_allowable_parent_groups': helpers.get_allowable_parent_groups,
+                'is_include_children_selected': helpers.is_include_children_selected,
                 }
 
 
-    # IRouter
-    # Redirect organization_read /organization/{id} to custom controller
-    # to include the datasets from the children organizations in the list
+    # IPackageController
+    # Modify the search query to include the datasets from
+    # the children organizations in the result list
+    def before_search(self, search_params):
+        ''' If include children selected the query string is modified '''
+        def _children_name_list(children):
+            name_list = []
+            for child in children:
+                name = child.get('name', "")
+                name_list += [name] + _children_name_list(child.get('children', []))
+            return name_list
 
-    def before_map(self, map):
-        hierarchy_controller = 'ckanext.hierarchy.controller:HierarchyOrganizationController'
-        map.connect('organization_read', '/organization/{id:(?!list$|new$).*}',  controller=hierarchy_controller, action='read', ckan_icon='sitemap')
-        return map
+	query = search_params.get('q', None)
+        c.include_children_selected = False
 
+        # fix the issues with multiple times repeated fields
+        # remove the param from the fields
+        new_fields = set()
+        for field,value in c.fields:
+            if (field != 'include_children'):
+                new_fields.add((field,value))
+        c.fields = list(new_fields)
 
+        # parse the query string to check if children are requested
+        if query:
+            base_query = []
+            #  remove whitespaces between fields and values
+            query = re.sub(': +', ':',  query)
+            for item in query.split(' '):
+                field = item.split(':')[0]
+                value = item.split(':')[-1]
+                # skip organization 
+                if (field == 'owner_org'):
+                    org_id = value
+                    continue
+                # skip include children andset option value
+                if (field == 'include_children'):
+                    if (value.upper() != "FALSE"):
+                        c.include_children_selected = True
+                    continue
+                base_query += [item]
+        if c.include_children_selected:
+            # add all the children organizations in an 'or' join
+            search_params['q'] = " ".join(base_query)
+            children = _children_name_list(helpers.group_tree_section(c.group_dict.get('id'), include_parents=False, include_siblings=False).get('children',[]))
+            if(children):
+                if (len(search_params['q'].strip())>0):
+                    search_params['q'] += ' AND '
+                search_params['q'] += '(organization:%s' % c.group_dict.get('name')
+                for name in children:
+                    if name:
+                        search_params['q'] += ' OR organization:%s' %  name
+                search_params['q'] += ")"
+            # add it back to fields 
+            c.fields += [('include_children','True')]
+
+        return search_params
 
 
 class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
