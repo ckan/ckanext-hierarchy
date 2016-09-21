@@ -37,6 +37,21 @@ For example, you may add next field:
 }
 ```
 
+Optionally one could also specify a full name and leave the field 'title' for
+the short name or acronym (more convenient for  display).
+```
+{
+    "field_name": "longname",
+    "label": "Full Name",
+    "validators": "ignore_missing unicode",
+    "form_snippet": "large_text.html",
+    "form_attrs": {"data-module": "slug-preview-target"},
+    "form_placeholder": "My Organization full name",
+    "display_snippet": null
+}
+```
+
+
 
 TODO:
 * make the trees prettier with JSTree

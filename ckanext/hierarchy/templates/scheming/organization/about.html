@@ -1,0 +1,26 @@
+{% ckan_extends %}
+
+{% block primary_content_inner %}
+  <h1>
+  {% block page_heading %}
+    {% if c.group_dict.longname %}
+      {{ c.group_dict.longname }} ({{ c.group_dict.display_name }})
+    {% else %}
+        {{ super() }}
+    {% endif %}
+  {% endblock %}
+  </h1>
+
+  <dl>
+    {% for f in c.scheming_fields %}
+      {% if f.display_snippet != None %}
+         <dt>{{ h.scheming_language_text(f.label) }}:</dt>
+         <dd>{{ c.group_dict[f.field_name] or ("&nbsp;"|safe) }}</dd>
+      {% endif %}
+    {% endfor %}
+  </dl>  
+
+  <div id="organization-tree">
+     {% snippet 'organization/snippets/organization_tree.html', top_nodes=[h.group_tree_section(id_=c.group_dict.id, type_=c.group_dict.type)], use_longnames=True %}
+  </div>
+{% endblock %}

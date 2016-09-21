@@ -8,5 +8,10 @@ Example:
 
 #}
 <div id="publisher-tree">
-     {% snippet 'organization/snippets/organization_tree.html', top_nodes=h.group_tree(type_='organization') %}
+     {% if  c.q %}
+     	{% set top_nodes = h.group_tree_highlight(organizations, h.group_tree(type_='organization')) %}
+     {% else %}
+     	{% set top_nodes = h.group_tree(organizations=organizations, type_='organization') %}
+     {% endif %}
+     {% snippet 'organization/snippets/organization_tree.html', top_nodes=top_nodes, use_longnames=True %}
 </div>

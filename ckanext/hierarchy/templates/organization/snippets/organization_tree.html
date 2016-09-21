@@ -10,22 +10,29 @@ orgs    - List of organizations
 
 Example:
 
-  {% snippet 'organization/snippets/organization_tree.html', top_nodes=h.group_tree(type_='organization') %}
+  {% snippet 'organization/snippets/organization_tree.html', top_nodes=h.group_tree(type_='organization'), use_longnames=False %}
 
 #}
-<ul>
-  {% for node in top_nodes recursive %}
-    <li id="node_{{ node.name }}">
-      {% if node.highlighted %}
-        <strong>
-      {% endif %}
-      {% link_for node.title, controller='organization', action='read', id=node.name %}
-      {% if node.highlighted %}
-        </strong>
-      {% endif %}
 
+
+{% resource 'hierarchy/hierarchy_theme.css' %}
+{% resource 'hierarchy/jquery.hierarchy.js' %}
+
+<ul class="hierarchy-tree-top">
+  {% for node in top_nodes recursive %}
+      {% set longname = h.group_tree_get_longname(node.name) %} 
+      {% set display_text = node.title %} 
+      {% if use_longnames and longname%}
+          {% set display_text = longname + " (" + display_text + ")" %}
+      {% endif %} 
+      {% if node.highlighted %}
+          <li class="highlighted" id="node_{{ node.name }}">
+      {% else %}
+          <li id="node_{{ node.name }}">
+      {% endif %}
+      {% link_for display_text, controller='organization', action='read', id=node.name %}
       {% if node.children %}
-        <ul> {{ loop(node.children) }} </ul>
+        <ul class="hierarchy-tree"> {{ loop(node.children) }} </ul>
       {% endif %}
     </li>
   {% endfor %}
