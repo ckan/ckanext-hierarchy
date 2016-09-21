@@ -82,7 +82,7 @@ class HierarchyDisplay(p.SingletonPlugin):
                 name_list += [name] + _children_name_list(child.get('children', []))
             return name_list
 
-	query = search_params.get('q', None)
+        query = search_params.get('q', None)
         c.include_children_selected = False
 
         # fix the issues with multiple times repeated fields
