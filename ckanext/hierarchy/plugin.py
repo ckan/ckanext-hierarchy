@@ -113,9 +113,9 @@ class HierarchyDisplay(p.SingletonPlugin):
                 base_query += [item]
         if c.include_children_selected:
             # add all the children organizations in an 'or' join
-            search_params['q'] = " ".join(base_query)
             children = _children_name_list(helpers.group_tree_section(c.group_dict.get('id'), include_parents=False, include_siblings=False).get('children',[]))
             if(children):
+                search_params['q'] = " ".join(base_query)
                 if (len(search_params['q'].strip())>0):
                     search_params['q'] += ' AND '
                 search_params['q'] += '(organization:%s' % c.group_dict.get('name')
@@ -123,7 +123,7 @@ class HierarchyDisplay(p.SingletonPlugin):
                     if name:
                         search_params['q'] += ' OR organization:%s' %  name
                 search_params['q'] += ")"
-            # add it back to fields 
+            # add it back to fields
             c.fields += [('include_children','True')]
 
         return search_params
