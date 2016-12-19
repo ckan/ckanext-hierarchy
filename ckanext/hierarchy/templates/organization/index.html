@@ -6,3 +6,21 @@
   {{ super() }}
   {% resource 'jstree/jquery.jstree.js' %}
 {% endblock %}
+
+
+  {% block organizations_list %}
+    {% if c.page.items or request.params %}
+      {% if c.page.items %}
+        {% if c.q %}
+          {% snippet "organization/snippets/organization_list.html", organizations=c.page.items %}
+        {% else %}
+          {% snippet "organization/snippets/organization_list.html", organizations=[] %}
+        {% endif %}
+      {% endif %}
+    {% else %}
+      {{ super() }}
+    {% endif %}
+  {% endblock %}
+
+  {% block page_pagination %}
+  {% endblock %}

@@ -68,7 +68,6 @@ def group_tree_highlight(organizations, group_tree_list):
             traverse_highlight(child, name_list)
 
     selected_names = [ o.get('name',None) for o in organizations]
-    print(selected_names)
 
     for group in group_tree_list:
         traverse_highlight(group, selected_names)
