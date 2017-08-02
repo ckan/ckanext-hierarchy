@@ -29,7 +29,10 @@ class HierarchyDisplay(p.SingletonPlugin):
                 }
 
     def get_helpers(self):
-        return {'group_tree': h.group_tree}
+        return {'group_tree': h.group_tree,
+                'group_tree_section': h.group_tree_section,
+                'group_tree_filter': h.group_tree_filter,
+                'group_tree_highlight': h.group_tree_highlight }
 
 class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
 
