@@ -9,8 +9,8 @@ Displays a tree of organzations
     {% if show_dataset_count == false or (show_dataset_count == true and node.dataset_count != 0 ) %}
     <li id="node_{{ node.name }}" class="organization">
         {% if node.children %}
-        <button class="js-expand btn btn-primary btn-xs"><i class="icon-plus"></i></button>
-        <button class="js-collapse btn btn-gray btn-xs"><i class="icon-minus"></i></button>
+        <button class="js-expand btn btn-primary btn-xs"><i class="fa fa-plus"></i></button>
+        <button class="js-collapse btn btn-gray btn-xs"><i class="fa fa-minus"></i></button>
         {% endif %}
         <div class="organization-row">
             {% if show_dataset_count == true %}
