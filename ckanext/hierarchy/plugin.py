@@ -83,7 +83,10 @@ class HierarchyDisplay(p.SingletonPlugin):
             return name_list
 
         query = search_params.get('q', None)
-        c.include_children_selected = False
+        try:
+            c.include_children_selected = False
+        except TypeError:
+            return search_params
 
         # fix the issues with multiple times repeated fields
         # remove the param from the fields
