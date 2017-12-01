@@ -4,7 +4,7 @@
       {% set facets = {
         'fields': c.fields_grouped,
         'search': c.search_facets,
-        'titles': c.facet_titles,
+        'titles': h.add_children_selected_facet_title(c.facet_titles),
         'translated_fields': c.translated_fields,
         'remove_field': c.remove_field }
       %}

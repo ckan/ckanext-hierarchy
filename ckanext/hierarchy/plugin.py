@@ -65,6 +65,7 @@ class HierarchyDisplay(p.SingletonPlugin):
                 'group_tree_highlight': helpers.group_tree_highlight,
                 'get_allowable_parent_groups': helpers.get_allowable_parent_groups,
                 'is_include_children_selected': helpers.is_include_children_selected,
+                'add_children_selected_facet_title': helpers.add_children_selected_facet_title,
                 }
 
 
@@ -81,9 +82,11 @@ class HierarchyDisplay(p.SingletonPlugin):
                 name = child.get('name', "")
                 name_list += [name] + _children_name_list(child.get('children', []))
             return name_list
-
         query = search_params.get('q', None)
         c.include_children_selected = False
+
+        #log.debug("before_search: query = " + repr(query))
+        #log.debug("before_search: search_params = " + repr(search_params))
 
         # fix the issues with multiple times repeated fields
         # remove the param from the fields
@@ -125,7 +128,8 @@ class HierarchyDisplay(p.SingletonPlugin):
                 search_params['q'] += ")"
             # add it back to fields
             c.fields += [('include_children','True')]
-
+        search_params['defType'] = 'edismax'
+        #log.debug("before_search: search_params = " + repr(search_params))
         return search_params
 
 

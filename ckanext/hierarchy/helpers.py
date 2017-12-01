@@ -89,3 +89,7 @@ def is_include_children_selected(fields):
         include_children_selected = True
     return include_children_selected
 
+
+def add_children_selected_facet_title(facet_titles):
+     facet_titles['include_children'] = 'Include Sub-Organizations'
+     return facet_titles
