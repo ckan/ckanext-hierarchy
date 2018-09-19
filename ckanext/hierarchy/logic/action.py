@@ -118,6 +118,8 @@ def group_tree_section(context, data_dict):
     group, from the top-level group downwards.
 
     :param id: the id or name of the group to include in the tree
+    :param include_parents: if false, starts from given group
+    :param include_siblingss: if false, excludes given group siblings
     :returns: the top GroupTreeNode of the tree section
     '''
     group = model.Group.get(data_dict['id'])
@@ -130,6 +132,44 @@ def group_tree_section(context, data_dict):
         raise p.toolkit.ValidationError(
             'Group type is "%s" not "%s" that %s' %
             (group.type, group_type, how_type_was_set))
+
+    include_parents = context.get('include_parents', True)
+    include_siblings = context.get('include_siblings', True)
+    if include_parents:
+        root_group = (group.get_parent_group_hierarchy(type=group_type) or [group])[0]
+    else:
+        root_group = group
+    if include_siblings or root_group==group:
+        return _group_tree_branch(root_group, highlight_group_name=group.name,
+                                  type=group_type)
+    else:
+        section_subtree = _group_tree_branch(group, highlight_group_name=group.name,
+                                             type=group_type)
+        return _nest_group_tree_list(group.get_parent_group_hierarchy(type=group_type), 
+                                     section_subtree)
+
+def _nest_group_tree_list(group_tree_list, group_tree_leaf):
+    '''Returns a tree branch composed by nesting the groups in the list.
+
+    :param group_tree_list: list of groups to build a tree, first is root
+    :returns: the top GroupTreeNode of the tree
+    '''
+    root_node = None
+    last_node = None
+    log.debug(group_tree_list)
+    for group in group_tree_list:
+        log.debug(group)
+        node = GroupTreeNode(
+         {'id': group.id,
+          'name': group.name,
+          'title': group.title})
+        if not root_node:
+            root_node = last_node = node
+        else:
+            last_node.add_child_node(node)
+            last_node = node
+    last_node.add_child_node(group_tree_leaf)
+    return root_node
 
     if group.state == u'active':
         # An optimal solution would be a recursive SQL query just for this, but this is fast enough for <10k organizations

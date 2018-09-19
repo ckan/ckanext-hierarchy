@@ -1,0 +1,39 @@
+
+ul.hierarchy-tree-top {
+     list-style-type: disc; 
+     background: none;
+}
+
+ul.hierarchy-tree {
+     list-style-type: none; 
+     background: url(images/vline.png) repeat-y; 
+     margin: 0; padding: 0; 
+}
+
+ul.hierarchy-tree {
+     margin-left: 10px; 
+} 
+
+ul.hierarchy-tree li { 
+     margin: 0; 
+     padding: 0 12px; 
+     line-height: 20px;
+     background: url(images/node.png) no-repeat;
+}
+
+ul.hierarchy-tree li:last-child {
+    background: #fff url(images/lastnode.png) no-repeat;
+}
+
+ul.hierarchy-tree-top li a, ul.hierarchy-tree li a{
+     font-weight: 400;
+     color: hsl(194, 72%, 34%);
+}
+
+ul.hierarchy-tree-top li.highlighted > a, ul.hierarchy-tree li.highlighted > a {
+     font-weight: 700;
+     color: hsl(194, 90%, 30%);
+     /*text-decoration: underline;*/
+     text-shadow: 1px 1px #dddddd;
+}
+

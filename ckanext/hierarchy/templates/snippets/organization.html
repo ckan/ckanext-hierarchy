@@ -1,0 +1,22 @@
+{% ckan_extends %}
+
+{% block heading %}
+    <h1 class="heading">
+        {% if organization.longname %}
+           {{ organization.longname }} ({{ organization.title or organization.name }})
+        {% else %}
+            {{ organization.title or organization.name }}
+        {% endif %}
+        {% if organization.state == 'deleted' %}
+          [{{ _('Deleted') }}]
+        {% endif %}
+    </h1>
+{% endblock %}
+
+{% block description %}
+    {{ super() }}
+    {% if c.group_dict %} 
+        <hr>
+        {% snippet 'organization/snippets/organization_tree.html', top_nodes=[h.group_tree_section(id_=c.group_dict.id, type_=c.group_dict.type, include_siblings=False)], use_shortnames=True %}
+    {% endif %}    
+{% endblock %}
