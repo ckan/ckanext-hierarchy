@@ -76,12 +76,21 @@ class HierarchyDisplay(p.SingletonPlugin):
 
         ''' If include children selected the query string is modified '''
 
+        # check first if this is a organization query
+        try:
+            current_fields = c.fields
+            #log.debug("current_fields = " + str(current_fields))
+        except:
+            log.error("Cannot search in children organization, c.fields not available")
+            return search_params
+
         def _children_name_list(children):
             name_list = []
             for child in children:
                 name = child.get('name', "")
                 name_list += [name] + _children_name_list(child.get('children', []))
             return name_list
+
         query = search_params.get('q', None)
         c.include_children_selected = False
 
