@@ -1,6 +1,10 @@
 import ckan.plugins as p
 import ckan.model as model
 from ckan.common import request
+import logging
+
+log = logging.getLogger(__name__)
+
 
 def group_tree(organizations=[], type_='organization'):
     full_tree_list = p.toolkit.get_action('group_tree')({}, {'type': type_})
@@ -42,7 +46,12 @@ def group_tree_section(id_, type_='organization', include_parents=True, include_
         {'include_parents':include_parents, 'include_siblings':include_siblings}, {'id': id_, 'type': type_,})
 
 def group_tree_parents(id_, type_='organization'):
-     tree_node =  p.toolkit.get_action('organization_show')({},{'id':id_})
+     try:
+         tree_node =  p.toolkit.get_action('organization_show')({},{'id':id_})
+     except Exception as inst:
+         log.warning("EXCEPTION getting the group tree parents: " + str(type(inst)) + ":" + str(inst))
+         log.warning("Returning empty list for " + str(id_))
+         return []
      if (tree_node['groups']):
          parent_id = tree_node['groups'][0]['name']
          parent_node =  p.toolkit.get_action('organization_show')({},{'id':parent_id})
