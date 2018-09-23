@@ -76,26 +76,35 @@ class HierarchyDisplay(p.SingletonPlugin):
 
         ''' If include children selected the query string is modified '''
 
-        # check first if this is a organization query
-        try:
-            current_fields = c.fields
-            #log.debug("current_fields = " + str(current_fields))
-        except:
-            log.error("Cannot search in children organization, c.fields not available")
-            return search_params
-
         def _children_name_list(children):
             name_list = []
             for child in children:
                 name = child.get('name', "")
                 name_list += [name] + _children_name_list(child.get('children', []))
             return name_list
+            
+        def _delete_include_children(q_str):
+            q_str = q_str.replace('include_children: "True"', '').replace('include_children: "False"', '').strip()
+            if len(q_str) > 0:
+                q_str = " " + q_str + " " 
+            return q_str        
+
+        # check first if this is a organization query
+        try:
+            current_fields = c.fields
+            #log.debug("current_fields = " + str(current_fields))
+            
+        except:
+            log.info("Cannot search in children organization, c.fields not available")
+            # remove the option from the search parameters
+            search_params['q'] = _delete_include_children(search_params.get('q',''))
+            return search_params
 
         query = search_params.get('q', None)
         c.include_children_selected = False
 
         #log.debug("before_search: query = " + repr(query))
-        #log.debug("before_search: search_params = " + repr(search_params))
+        #log.debug("before_search (start): search_params = " + repr(search_params))
 
         # fix the issues with multiple times repeated fields
         # remove the param from the fields
@@ -123,10 +132,20 @@ class HierarchyDisplay(p.SingletonPlugin):
                         c.include_children_selected = True
                     continue
                 base_query += [item]
+        #log.debug("c.include_children_selected = " + str(c.include_children_selected))
         if c.include_children_selected:
-            # add all the children organizations in an 'or' join
+        
+            # remove the option from the search parameters
+            search_params['q'] = _delete_include_children(search_params.get('q',''))
+
+           # add all the children organizations in an 'or' join
             children = _children_name_list(helpers.group_tree_section(c.group_dict.get('id'), include_parents=False, include_siblings=False).get('children',[]))
+            
             if(children):
+                
+                # add it back to fields
+                c.fields += [('include_children','True')]
+                
                 search_params['q'] = " ".join(base_query)
                 if (len(search_params['q'].strip())>0):
                     search_params['q'] += ' AND '
@@ -135,10 +154,20 @@ class HierarchyDisplay(p.SingletonPlugin):
                     if name:
                         search_params['q'] += ' OR organization:%s' %  name
                 search_params['q'] += ")"
-            # add it back to fields
-            c.fields += [('include_children','True')]
-        search_params['defType'] = 'edismax'
-        #log.debug("before_search: search_params = " + repr(search_params))
+                
+                # clear up the fq parameter
+                fq = search_params.get('fq', "")
+                if fq.find('owner_org:"' + c.group_dict.get('id') + '"')>=0:
+                     start = fq.find('owner_org:\"') 
+                     end = fq.find(c.group_dict.get('id') + '"')
+                     if end >= 0:
+                         len_extra = len(c.group_dict.get('id') + '"')
+                         search_params['fq'] = fq[0:start] + fq[end+len_extra:]
+                         if len(search_params['fq']) == 0:
+                             del search_params['fq']
+
+                search_params['defType'] = 'edismax'
+        #log.debug("before_search (return): search_params = " + repr(search_params))
         return search_params
 
 
