@@ -39,7 +39,7 @@ class HierarchyDisplay(p.SingletonPlugin):
     p.implements(p.IConfigurer, inherit=True)
     p.implements(p.IActions, inherit=True)
     p.implements(p.ITemplateHelpers, inherit=True)
-    p.implements(p.IPackageController, inherit=True)
+    #p.implements(p.IPackageController, inherit=True)
 
     # IConfigurer
 
