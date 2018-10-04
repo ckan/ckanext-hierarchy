@@ -6,22 +6,24 @@ Displays a tree of organzations
 {% resource 'hierarchy/form.js' %}
 <ul class="no-bullet organization-tree" data-organization-tree>
     {% for node in top_nodes recursive %}
-    {% if show_dataset_count == false or (show_dataset_count == true and node.dataset_count != 0 ) %}
-    <li id="node_{{ node.name }}" class="organization">
-        {% if node.children %}
-        <button class="js-expand btn btn-primary btn-xs"><i class="fa fa-plus"></i></button>
-        <button class="js-collapse btn btn-gray btn-xs"><i class="fa fa-minus"></i></button>
+        {% if show_dataset_count == false or (show_dataset_count == true and node.dataset_count != 0 ) %}
+            <li id="node_{{ node.name }}" class="organization">
+                {% if node.children %}
+                    <button class="hierarchy-btn js-expand btn btn-primary btn-xs"><i class="fas fa-plus-circle"></i></i></button>
+                    <button class="hierarchy-btn js-collapse btn btn-gray btn-xs"><i class="fas fa-minus"></i></button>
+                {% else %}
+                    <div class="organization-hierarchy-empty-space"></div>
+                {% endif %}
+                <div class="organization-row">
+                    <a href="{{ url_prefix }}{{ node.name }}">{{ h.extra_translation(node, 'title') or node.name }}</a>
+                    {% if show_dataset_count == true %}
+                        <span class="organization-dataset-count">{{ node.dataset_count }}</span>
+                    {% endif %}
+                </div>
+                {% if node.children %}
+                    <ul class="no-bullet organization-subtree js-collapsed"> {{ loop(node.children) }} </ul>
+                {% endif %}
+            </li>
         {% endif %}
-        <div class="organization-row">
-            {% if show_dataset_count == true %}
-            <span class="badge">{{ node.dataset_count }}</span>&nbsp;
-            {% endif %}
-            <a href="{{ url_prefix }}{{ node.name }}">{{ h.extra_translation(node, 'title') or node.name }}</a>
-        </div>
-        {% if node.children %}
-        <ul class="no-bullet organization-subtree js-collapsed"> {{ loop(node.children) }} </ul>
-        {% endif %}
-    </li>
-    {% endif %}
     {% endfor %}
 </ul>

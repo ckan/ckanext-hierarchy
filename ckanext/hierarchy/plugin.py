@@ -48,7 +48,7 @@ class HierarchyDisplay(p.SingletonPlugin):
         p.toolkit.add_template_directory(config, 'public')
         p.toolkit.add_resource('public/scripts/vendor/jstree', 'jstree')
         p.toolkit.add_resource('public/scripts', 'hierarchy')
-        p.toolkit.add_resource('fanstatic', 'hierarchy')
+        p.toolkit.add_resource('fanstatic', 'hierarchy-fanstatic')
 
     # IActions
 
