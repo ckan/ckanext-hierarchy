@@ -109,6 +109,9 @@ class HierarchyDisplay(p.SingletonPlugin):
                 if (field == 'include_children'):
                     if (value.upper() != "FALSE"):
                         c.include_children_selected = True
+                    #Remove "include_children" parameter if present in "q" field at search_param variable, to avoid erronous condition
+                    # when the current organization has no children
+                    search_params['q'] = re.sub('include_children: "(True|False)"', '', search_params['q'], flags=re.IGNORECASE)
                     continue
                 base_query += [item]
         if c.include_children_selected:
