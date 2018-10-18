@@ -128,7 +128,7 @@ class HierarchyDisplay(p.SingletonPlugin):
                     continue
                 # skip include children andset option value
                 if (field == 'include_children'):
-                    if (value.upper() != "FALSE"):
+                    if (value.upper() != '"FALSE"'):
                         c.include_children_selected = True
                     continue
                 base_query += [item]
