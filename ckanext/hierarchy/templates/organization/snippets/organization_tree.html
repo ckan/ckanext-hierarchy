@@ -6,9 +6,9 @@ Displays a tree of organzations
 {% resource 'hierarchy/form.js' %}
 <ul class="no-bullet organization-tree" data-organization-tree>
     <div class="organization-tree-short-description">
-        <p> {% trans %} The dataset amount of the organization is shown beside the organization name. {% endtrans %} </p>
+        <p> {% trans %}The dataset amount of the organization is shown beside the organization name.{% endtrans %} </p>
 
-        <p> {% trans %} Organizations with no datasets are shown in this list only when using the search functionality {% endtrans %} </p>
+        <p> {% trans %}Organizations with no datasets are shown in this list only when using the search functionality{% endtrans %} </p>
     </div>
     {% for node in top_nodes recursive %}
         {% if show_dataset_count == false or (show_dataset_count == true and node.dataset_count != 0 ) %}
