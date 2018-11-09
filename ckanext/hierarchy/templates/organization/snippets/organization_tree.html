@@ -14,7 +14,9 @@ Displays a tree of organzations
         {% if show_dataset_count == false or (show_dataset_count == true and node.dataset_count != 0 ) %}
             <li id="node_{{ node.name }}" class="organization">
                 {% if node.children %}
-                    <button class="hierarchy-btn js-expand btn btn-primary btn-xs"><i class="fas fa-plus-circle"></i></i></button>
+                    <button class="hierarchy-btn js-expand btn btn-primary btn-xs">
+                        <i class="fas fa-plus-circle"></i>
+                    </button>
                     <button class="hierarchy-btn js-collapse btn btn-xs">
                         <i class="far fa-minus-circle"></i>
                     </button>
