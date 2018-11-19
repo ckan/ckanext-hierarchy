@@ -11,28 +11,26 @@ Displays a tree of organzations
         <p> {% trans %}Organizations with no datasets are shown in this list only when using the search functionality{% endtrans %} </p>
     </div>
     {% for node in top_nodes recursive %}
-        {% if show_dataset_count == false or (show_dataset_count == true and node.dataset_count != 0 ) %}
-            <li id="node_{{ node.name }}" class="organization">
-                {% if node.children %}
-                    <button class="hierarchy-btn js-expand btn btn-primary btn-xs">
-                        <i class="fas fa-plus-circle"></i>
-                    </button>
-                    <button class="hierarchy-btn js-collapse btn btn-xs">
-                        <i class="far fa-minus-circle"></i>
-                    </button>
-                {% else %}
-                    <div class="organization-hierarchy-empty-space"></div>
+        <li id="node_{{ node.name }}" class="organization">
+            {% if node.children %}
+                <button class="hierarchy-btn js-expand btn btn-primary btn-xs">
+                    <i class="fas fa-plus-circle"></i>
+                </button>
+                <button class="hierarchy-btn js-collapse btn btn-xs">
+                    <i class="far fa-minus-circle"></i>
+                </button>
+            {% else %}
+                <div class="organization-hierarchy-empty-space"></div>
+            {% endif %}
+            <div class="organization-row">
+                {% if show_dataset_count == true %}
+                    <span class="organization-dataset-count">{{ node.dataset_count }}</span>
                 {% endif %}
-                <div class="organization-row">
-                    {% if show_dataset_count == true %}
-                        <span class="organization-dataset-count">{{ node.dataset_count }}</span>
-                    {% endif %}
-                    <a href="{{ url_prefix }}{{ node.name }}">{{ h.extra_translation(node, 'title') or node.name }}</a>
-                </div>
-                {% if node.children %}
-                    <ul class="no-bullet organization-subtree js-collapsed"> {{ loop(node.children) }} </ul>
-                {% endif %}
-            </li>
-        {% endif %}
+                <a href="{{ url_prefix }}{{ node.name }}">{{ h.extra_translation(node, 'title') or node.name }}</a>
+            </div>
+            {% if node.children %}
+                <ul class="no-bullet organization-subtree js-collapsed"> {{ loop(node.children) }} </ul>
+            {% endif %}
+        </li>
     {% endfor %}
 </ul>
