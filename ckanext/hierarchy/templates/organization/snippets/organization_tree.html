@@ -11,7 +11,7 @@ Displays a tree of organzations
         <p> {% trans %}Organizations with no datasets are shown in this list only when using the search functionality{% endtrans %} </p>
     </div>
     {% for node in top_nodes recursive %}
-        <li id="node_{{ node.name }}" class="organization">
+        <li id="node_{{ node.name }}" class="organization organization-list-item">
             {% if node.children %}
                 <button class="hierarchy-btn js-expand btn btn-primary btn-xs">
                     <i class="fas fa-plus-circle"></i>
