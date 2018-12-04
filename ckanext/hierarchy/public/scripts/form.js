@@ -1,7 +1,7 @@
 $(document).ready(function(){
     $('[data-organization-tree] .js-expand').bind('click', function(){
         // Separate rule for buttons since .show() results in 'block'
-        $(this).siblings('.js-collapse.btn').css('display', 'inline-block');
+        $(this).siblings('.js-collapse.btn').css('display', 'inline');
         
         $(this).siblings('.js-collapse, .js-collapsed').show()
         $(this).hide();
