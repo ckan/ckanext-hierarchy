@@ -1,15 +1,17 @@
 {#
-Displays a tree of organzations
+Displays a tree of organizations
 #}
 {% set show_dataset_count = show_dataset_count or false %}
 {% set url_prefix = h.url_for(controller='organization', action='read', id='') %}
+{% set show_short_description = show_short_description if show_short_description is sameas false else true %}
+
 {% resource 'hierarchy/form.js' %}
 <ul class="no-bullet organization-tree" data-organization-tree>
+  {% if show_short_description == true %}
     <div class="organization-tree-short-description">
         <p> {% trans %}The dataset amount of the organization is shown beside the organization name.{% endtrans %} </p>
-
-        <p> {% trans %}Organizations with no datasets are shown in this list only when using the search functionality{% endtrans %} </p>
     </div>
+  {% endif %}
     {% for node in top_nodes recursive %}
         <li id="node_{{ node.name }}" class="organization organization-list-item">
             {% if node.children %}
