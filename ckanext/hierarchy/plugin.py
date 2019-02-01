@@ -84,16 +84,15 @@ class HierarchyDisplay(p.SingletonPlugin):
             return name_list
             
         def _delete_include_children(q_str):
-            q_str = q_str.replace('include_children: "True"', '').replace('include_children: "False"', '').strip()
-            if len(q_str) > 0:
-                q_str = " " + q_str + " " 
+            q_str = re.sub('include_children: "(True|False)"', '', q_str, flags=re.IGNORECASE)
+            if len(q_str.strip()) == 0:
+                q_str = ""
             return q_str        
 
         # check first if this is a organization query
         try:
             current_fields = c.fields
             #log.debug("current_fields = " + str(current_fields))
-            
         except:
             log.info("Cannot search in children organization, c.fields not available")
             # remove the option from the search parameters
@@ -128,10 +127,11 @@ class HierarchyDisplay(p.SingletonPlugin):
                     continue
                 # skip include children andset option value
                 if (field == 'include_children'):
-                    if (value.upper() != "FALSE"):
+                    if (value.upper() != '"FALSE"'):
                         c.include_children_selected = True
                     continue
                 base_query += [item]
+                
         #log.debug("c.include_children_selected = " + str(c.include_children_selected))
         if c.include_children_selected:
         
