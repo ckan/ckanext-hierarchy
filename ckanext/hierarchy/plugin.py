@@ -73,7 +73,8 @@ class HierarchyDisplay(p.SingletonPlugin):
     # the children organizations in the result list
     def before_search(self, search_params):
 
-        ''' If include children selected the query string is modified '''
+        if not hasattr('c', 'fields'):
+            return search_params
 
         def _children_name_list(children):
             name_list = []
@@ -101,7 +102,7 @@ class HierarchyDisplay(p.SingletonPlugin):
             for item in query.split(' '):
                 field = item.split(':')[0]
                 value = item.split(':')[-1]
-                # skip organization 
+                # skip organization
                 if (field == 'owner_org'):
                     org_id = value
                     continue
