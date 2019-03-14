@@ -1,6 +1,5 @@
 from setuptools import setup, find_packages
 
-
 version = '0.1'
 
 setup(
@@ -23,9 +22,8 @@ setup(
         # -*- Extra requirements: -*-
     ],
     entry_points="""
-        [ckan.plugins]
-        hierarchy_form=ckanext.hierarchy.plugin:HierarchyForm
-        hierarchy_display=ckanext.hierarchy.plugin:HierarchyDisplay
-
-    """,
+            [ckan.plugins]
+            hierarchy_display=ckanext.hierarchy.plugin:HierarchyDisplay
+            hierarchy_form=ckanext.hierarchy.plugin:HierarchyForm
+        """,
 )

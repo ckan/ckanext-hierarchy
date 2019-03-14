@@ -125,7 +125,7 @@ def group_tree_section(context, data_dict):
     group_type = data_dict.get('type', 'group')
     if group.type != group_type:
         how_type_was_set = 'was specified' if data_dict.get('type') \
-                           else 'is filtered by default'
+            else 'is filtered by default'
         raise p.toolkit.ValidationError(
             'Group type is "%s" not "%s" that %s' %
             (group.type, group_type, how_type_was_set))
@@ -156,9 +156,9 @@ def _nest_group_tree_list(group_tree_list, group_tree_leaf):
     for group in group_tree_list:
         log.debug(group)
         node = GroupTreeNode(
-         {'id': group.id,
-          'name': group.name,
-          'title': group.title})
+            {'id': group.id,
+             'name': group.name,
+             'title': group.title})
         if not root_node:
             root_node = last_node = node
         else:
