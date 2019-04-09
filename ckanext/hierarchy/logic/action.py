@@ -10,8 +10,12 @@ log = logging.getLogger(__name__)
 
 
 def _accumulate_dataset_counts(groups, members):
-    child_parents_map = {g.id: [m.table_id for m in members if m.group_id == g.id] for g in groups}
+    members_by_group = {}
+    for m in members:
+        members_by_group.setdefault(m.group_id, []).append(m.table_id)
+
     dataset_count_map = {g.id: 0 for g in groups}
+    child_parents_map = {gid: members_by_group.get(gid, []) for gid in dataset_count_map.keys()}
 
     def add_to_ancestors(id, value, counts):
         counts[id] += value
@@ -69,14 +73,18 @@ def _fetch_all_organizations(force_root_ids=None):
 
     dataset_counts = _accumulate_dataset_counts(groups, members)
 
-    for group in groups:
+    for gid, group in groups_by_id.items():
         # Set extras-dicts into a custom version of extras to avoid triggering SQLAlchemy queries
-        group.custom_extras = extras_by_group.get(group.id, {})
+        group.custom_extras = extras_by_group.get(gid, {})
 
         # Add subtree dataset counts to groups
-        group.subtree_dataset_count = dataset_counts.get(group.id, 0)
+        group.subtree_dataset_count = dataset_counts.get(gid, 0)
 
-    parent_child_id_map = {pid: [m.group_id for m in members if m.table_id == pid] for pid in parent_ids}
+    groups_by_member = {}
+    for m in members:
+        groups_by_member.setdefault(m.table_id, []).append(m.group_id)
+
+    parent_child_id_map = {pid: groups_by_member.get(pid, []) for pid in parent_ids}
 
     def group_descendants(rid):
         group_child_ids = (cid for cid in parent_child_id_map.get(rid, []) if cid in groups_by_id)
