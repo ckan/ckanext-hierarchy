@@ -1,4 +1,6 @@
 {% ckan_extends %}
+  {{ super() }}
+
 
 <!-- JSTree is included, but so far does nothing. Need to encapsulate it in a
      'javascript module' -->
@@ -9,12 +11,12 @@
 
 
   {% block organizations_list %}
-    {% if c.page.items or request.params %}
-      {% if c.page.items %}
+    {% if page or request.params %}
+      {% if page.items %}
         {% if c.q %}
-          {% snippet "organization/snippets/organization_list.html", organizations=c.page.items %}
+         	{% snippet "organization/snippets/organization_list.html", organizations=page.items %}
         {% else %}
-          {% snippet "organization/snippets/organization_list.html", organizations=[] %}
+          	{% snippet "organization/snippets/organization_list.html", organizations=[] %}          
         {% endif %}
       {% endif %}
     {% else %}

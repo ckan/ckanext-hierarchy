@@ -75,6 +75,8 @@ class HierarchyDisplay(p.SingletonPlugin):
     def before_search(self, search_params):
 
         ''' If include children selected the query string is modified '''
+        if not hasattr('c', 'fields'):
+            return search_params
 
         def _children_name_list(children):
             name_list = []
