@@ -11,12 +11,18 @@
 
 
   {% block organizations_list %}
-    {% if page or request.params %}
-      {% if page.items %}
+    {% if page or c.page or request.params %}
+      {% if page %}
         {% if c.q %}
          	{% snippet "organization/snippets/organization_list.html", organizations=page.items %}
         {% else %}
           	{% snippet "organization/snippets/organization_list.html", organizations=[] %}          
+        {% endif %}
+      {% elif c.page %}
+       {% if c.q %}
+                {% snippet "organization/snippets/organization_list.html", organizations=c.page.items %}
+        {% else %}
+                {% snippet "organization/snippets/organization_list.html", organizations=[] %}
         {% endif %}
       {% endif %}
     {% else %}
