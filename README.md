@@ -73,6 +73,9 @@ should come before hierarchy_form
 ckan.plugins = stats text_view recline_view ... hierarchy_display hierarchy_form
 ```
 
-## Copyright & Licence
+## Licence and copyright
 
-Commits up to 2017 are Crown Copyright 2013. This module is openly licensed with AGPLv3 - see LICENSE file.
+This module is openly licensed with AGPLv3 - see LICENSE file.
+
+Copyright belongs to commit authors. Commits 2013-2017 by @davidread are Crown Copyright.
+
