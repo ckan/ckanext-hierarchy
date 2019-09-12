@@ -24,7 +24,7 @@ hierarchy_form into your own. If you have your own templates then you can use
 the snippets (or logic functions) that this extension provides to display the
 trees.
 
-In order to make hierarchy works with ckanext-scheming you need to enable just
+In order to make hierarchy work with ckanext-scheming you need to enable just
 hierarchy_display and then use corresponding form_snippet in your org_schema.
 For example, you may add next field:
 ```
@@ -52,13 +52,12 @@ the short name or acronym (more convenient for  display).
 ```
 
 
-
 TODO:
 * make the trees prettier with JSTree
 
 ## Compatibility
 
-This extension requires CKAN v2.2 or later. Specifically it uses these changes CKAN: https://github.com/ckan/ckan/pull/1247/files
+This extension requires CKAN v2.2 or later.
 
 ## Installation
 
@@ -66,7 +65,7 @@ Install the extension in your python environment
 ```
 $ . /usr/lib/ckan/default/bin/activate
 (pyenv) $ cd /usr/lib/ckan/default/src
-(pyenv) $ pip install -e "git+https://github.com/datagovuk/ckanext-hierarchy.git#egg=ckanext-hierarchy"
+(pyenv) $ pip install -e "git+https://github.com/davidread/ckanext-hierarchy.git#egg=ckanext-hierarchy"
 ```
 Then change your CKAN ini file (e.g. development.ini or production.ini).  Note that hierarchy_display
 should come before hierarchy_form
@@ -76,4 +75,4 @@ ckan.plugins = stats text_view recline_view ... hierarchy_display hierarchy_form
 
 ## Copyright & Licence
 
-This module is Crown Copyright 2013 and openly licensed with AGPLv3 - see LICENSE file.
+Commits up to 2017 are Crown Copyright 2013. This module is openly licensed with AGPLv3 - see LICENSE file.
