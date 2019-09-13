@@ -1,6 +1,8 @@
 {% ckan_extends %}
 
     {% block groups_search_form %}
+      {# This is the same as the original BUT we also pass the 'include_children_option' parameter to the snippet #}
+
       {% set facets = {
         'fields': c.fields_grouped,
         'search': c.search_facets,
