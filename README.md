@@ -1,5 +1,5 @@
 
-[![Travis CI status](https://travis-ci.org/davidread/ckanext-hierarchy.svg?branch=master)](https://travis-ci.org//ckanext-hierarchy)
+[![Travis CI status](https://travis-ci.org/davidread/ckanext-hierarchy.svg?branch=master)](https://travis-ci.org/davidread/ckanext-hierarchy)
 
 [![Latest version on pypi](https://img.shields.io/pypi/v/ckanext-hierarchy.svg)](https://pypi.org/project/ckanext-hierarchy/)
 
