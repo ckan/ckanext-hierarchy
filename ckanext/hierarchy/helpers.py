@@ -1,5 +1,3 @@
-import re
-
 import ckan.plugins as p
 import ckan.model as model
 from ckan.common import request
@@ -16,9 +14,9 @@ def group_tree(organizations=[], type_='organization'):
 
 
 def group_tree_filter(organizations, group_tree_list, highlight=False):
-    # this method leaves only the sections of the tree corresponding to the list
-    # since it was developed for the users, all children organizations from the
-    # organizations in the list are included
+    # this method leaves only the sections of the tree corresponding to the
+    # list since it was developed for the users, all children organizations
+    # from the organizations in the list are included
     def traverse_select_highlighted(group_tree, selection=[], highlight=False):
         # add highlighted branches to the filtered tree
         if group_tree['highlighted']:
@@ -40,16 +38,20 @@ def group_tree_filter(organizations, group_tree_list, highlight=False):
     return filtered_tree
 
 
-def group_tree_section(id_, type_='organization', include_parents=True, include_siblings=True):
+def group_tree_section(id_, type_='organization', include_parents=True,
+                       include_siblings=True):
     return p.toolkit.get_action('group_tree_section')(
-        {'include_parents': include_parents, 'include_siblings': include_siblings}, {'id': id_, 'type': type_, })
+        {'include_parents': include_parents,
+         'include_siblings': include_siblings},
+        {'id': id_, 'type': type_, })
 
 
 def group_tree_parents(id_, type_='organization'):
     tree_node = p.toolkit.get_action('organization_show')({}, {'id': id_})
     if (tree_node['groups']):
         parent_id = tree_node['groups'][0]['name']
-        parent_node = p.toolkit.get_action('organization_show')({}, {'id': parent_id})
+        parent_node = \
+            p.toolkit.get_action('organization_show')({}, {'id': parent_id})
         return group_tree_parents(parent_id) + [parent_node]
     else:
         return []

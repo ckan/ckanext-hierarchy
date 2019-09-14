@@ -45,17 +45,20 @@ def group_tree_section(context, data_dict):
     include_parents = context.get('include_parents', True)
     include_siblings = context.get('include_siblings', True)
     if include_parents:
-        root_group = (group.get_parent_group_hierarchy(type=group_type) or [group])[0]
+        root_group = (group.get_parent_group_hierarchy(type=group_type)
+                      or [group])[0]
     else:
         root_group = group
     if include_siblings or root_group == group:
         return _group_tree_branch(root_group, highlight_group_name=group.name,
                                   type=group_type)
     else:
-        section_subtree = _group_tree_branch(group, highlight_group_name=group.name,
+        section_subtree = _group_tree_branch(group,
+                                             highlight_group_name=group.name,
                                              type=group_type)
-        return _nest_group_tree_list(group.get_parent_group_hierarchy(type=group_type),
-                                     section_subtree)
+        return _nest_group_tree_list(
+            group.get_parent_group_hierarchy(type=group_type),
+            section_subtree)
 
 
 def _nest_group_tree_list(group_tree_list, group_tree_leaf):
