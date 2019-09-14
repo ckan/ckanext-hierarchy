@@ -15,7 +15,6 @@ p.toolkit.check_ckan_version(min_version='2.0')
 
 
 def custom_convert_from_extras(key, data, errors, context):
-
     '''Converts values from extras, tailored for groups.'''
 
     # Set to empty string to remove Missing objects
@@ -37,7 +36,6 @@ def custom_convert_from_extras(key, data, errors, context):
 
 
 class HierarchyDisplay(p.SingletonPlugin):
-
     p.implements(p.IConfigurer, inherit=True)
     p.implements(p.IActions, inherit=True)
     p.implements(p.ITemplateHelpers, inherit=True)
@@ -140,7 +138,6 @@ class HierarchyDisplay(p.SingletonPlugin):
 
 
 class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
-
     p.implements(p.IGroupForm, inherit=True)
 
     # IGroupForm

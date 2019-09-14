@@ -38,7 +38,7 @@ def group_tree_section(context, data_dict):
     group_type = data_dict.get('type', 'group')
     if group.type != group_type:
         how_type_was_set = 'was specified' if data_dict.get('type') \
-                           else 'is filtered by default'
+            else 'is filtered by default'
         raise p.toolkit.ValidationError(
             'Group type is "%s" not "%s" that %s' %
             (group.type, group_type, how_type_was_set))
@@ -48,14 +48,15 @@ def group_tree_section(context, data_dict):
         root_group = (group.get_parent_group_hierarchy(type=group_type) or [group])[0]
     else:
         root_group = group
-    if include_siblings or root_group==group:
+    if include_siblings or root_group == group:
         return _group_tree_branch(root_group, highlight_group_name=group.name,
                                   type=group_type)
     else:
         section_subtree = _group_tree_branch(group, highlight_group_name=group.name,
                                              type=group_type)
-        return _nest_group_tree_list(group.get_parent_group_hierarchy(type=group_type), 
+        return _nest_group_tree_list(group.get_parent_group_hierarchy(type=group_type),
                                      section_subtree)
+
 
 def _nest_group_tree_list(group_tree_list, group_tree_leaf):
     '''Returns a tree branch composed by nesting the groups in the list.
@@ -69,9 +70,9 @@ def _nest_group_tree_list(group_tree_list, group_tree_leaf):
     for group in group_tree_list:
         log.debug(group)
         node = GroupTreeNode(
-         {'id': group.id,
-          'name': group.name,
-          'title': group.title})
+            {'id': group.id,
+             'name': group.name,
+             'title': group.title})
         if not root_node:
             root_node = last_node = node
         else:
