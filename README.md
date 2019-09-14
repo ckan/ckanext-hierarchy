@@ -1,10 +1,19 @@
 # ckanext-hierarchy - Organization hierarchy for CKAN
 
+Organizations can be arranged into a tree hierarchy.
+
+This new hierarchical arrangement of organizations is displayed
+using templates in this extension, instead of the usual list:
+![Screenshot of organizations page](screenshots/orgs_page.png)
+
 Provides a new field on the organization edit form to select a parent
-organization. This new hierarchical arrangement of organizations is displayed
-using templates in this extension, instead of the usual list. An organization
-page also displays the section of the tree that it is part of, under the
-'About' tab.
+organization:
+![Screenshot of organization edit page](screenshots/org_edit.png)
+
+When viewing an organization you see its context within the tree in the side bar. In addition you can widen search of the organization's datasets to include datasets in sub-organizations too:
+![Screenshot of organization page](screenshots/org_page.png)
+
+## Detail
 
 Forms (hierachy_form plugin):
 * /organization/new
@@ -51,13 +60,12 @@ the short name or acronym (more convenient for  display).
 }
 ```
 
-
 TODO:
 * make the trees prettier with JSTree
 
 ## Compatibility
 
-This extension requires CKAN v2.2 or later.
+This extension requires CKAN v2.7 or later.
 
 ## Installation
 
