@@ -16,8 +16,8 @@ log = logging.getLogger(__name__)
 # This plugin is designed to work only these versions of CKAN
 p.toolkit.check_ckan_version(min_version='2.0')
 
-def custom_convert_from_extras(key, data, errors, context):
 
+def custom_convert_from_extras(key, data, errors, context):
     '''Converts values from extras, tailored for groups.'''
 
     # Set to empty string to remove Missing objects
@@ -27,18 +27,18 @@ def custom_convert_from_extras(key, data, errors, context):
     for data_key in data.keys():
         if (data_key[0] == 'extras'):
             data_value = data[data_key]
-            if( 'key' in data_value and data_value['key'] == key[-1]):
-               data[key] = data_value['value']
-               to_remove.append(data_key)
-               break
+            if ('key' in data_value and data_value['key'] == key[-1]):
+                data[key] = data_value['value']
+                to_remove.append(data_key)
+                break
     else:
         return
 
     for remove_key in to_remove:
         del data[remove_key]
 
-class HierarchyDisplay(p.SingletonPlugin):
 
+class HierarchyDisplay(p.SingletonPlugin):
     p.implements(p.IConfigurer, inherit=True)
     p.implements(p.IActions, inherit=True)
     p.implements(p.ITemplateHelpers, inherit=True)
@@ -70,7 +70,6 @@ class HierarchyDisplay(p.SingletonPlugin):
                 'is_include_children_selected': helpers.is_include_children_selected,
                 }
 
-
     # IPackageController
 
     def before_search(self, search_params):
@@ -95,9 +94,9 @@ class HierarchyDisplay(p.SingletonPlugin):
         # Remove the param from the fields - NB no longer works
         # e.g. [('include_children', 'True')]
         new_fields = set()
-        for field,value in c.fields:
+        for field, value in c.fields:
             if (field != 'include_children'):
-                new_fields.add((field,value))
+                new_fields.add((field, value))
         c.fields = list(new_fields)
 
         # parse the query string to check if children are requested
@@ -140,9 +139,7 @@ class HierarchyDisplay(p.SingletonPlugin):
 
 
 class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
-
     p.implements(p.IGroupForm, inherit=True)
-
 
     # IGroupForm
 
