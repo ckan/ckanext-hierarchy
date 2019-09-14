@@ -80,14 +80,14 @@ class HierarchyDisplay(p.SingletonPlugin):
         # by c being registered for this thread, and the existence of c.fields
         # values
         try:
-            if not isinstance(c.fields, list):
+            if not isinstance(c.fields, list) and not hasattr(c, 'fields'):
                 return search_params
         except TypeError:
             return search_params
 
         # e.g. search_params['q'] = u' owner_org:"id" include_children: "True"'
-        query = search_params.get('q', None)
-        c.include_children_selected = False
+        query = search_params.get('q')
+        fq = search_params.get('fq')
 
         # Fix the issues with multiple times repeated fields
         # Remove the param from the fields - NB no longer works
@@ -116,9 +116,12 @@ class HierarchyDisplay(p.SingletonPlugin):
 
             if children_names:
                 # remove existing owner_org:"<parent>" clause - we'll replace
-                # it with the tree of orgs in a moment
-                query = query.replace(
-                    'owner_org:"{}"'.format(c.group_dict.get('id')), '')
+                # it with the tree of orgs in a moment.
+                owner_org_q = 'owner_org:"{}"'.format(c.group_dict.get('id'))
+                # CKAN<=2.7 it's in the q field:
+                query = query.replace(owner_org_q, '')
+                # CKAN=2.8.x it's in the fq field:
+                search_params['fq'] = fq.replace(owner_org_q, '')
 
                 # add the org clause
                 query = query.strip()
@@ -130,7 +133,7 @@ class HierarchyDisplay(p.SingletonPlugin):
                         for org_name in [c.group_dict.get('name')] +
                         children_names))
 
-            search_params['q'] = query
+            search_params['q'] = query.strip()
 
             # add it back to fields
             # c.fields += [('include_children', 'True')]
