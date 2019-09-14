@@ -110,13 +110,15 @@ class HierarchyDisplay(p.SingletonPlugin):
                 get_children_group_hierarchy(type='organization')
             children_names = [org[1] for org in children_org_hierarchy]
 
+            # remove include_children clause - it is a message for this func,
+            # not solr
+            query = query.replace('include_children: "True"', '')
+
             if children_names:
                 # remove existing owner_org:"<parent>" clause - we'll replace
                 # it with the tree of orgs in a moment
                 query = query.replace(
                     'owner_org:"{}"'.format(c.group_dict.get('id')), '')
-                # remove include_children clause
-                query = query.replace('include_children: "True"', '')
 
                 # add the org clause
                 query = query.strip()
@@ -127,7 +129,9 @@ class HierarchyDisplay(p.SingletonPlugin):
                         'organization:{}'.format(org_name)
                         for org_name in [c.group_dict.get('name')] +
                         children_names))
-                search_params['q'] = query
+
+            search_params['q'] = query
+
             # add it back to fields
             # c.fields += [('include_children', 'True')]
 
