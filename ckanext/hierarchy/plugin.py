@@ -84,6 +84,8 @@ class HierarchyDisplay(p.SingletonPlugin):
                 return search_params
         except TypeError:
             return search_params
+        except AttributeError:
+            return search_params
 
         # e.g. search_params['q'] = u' owner_org:"id" include_children: "True"'
         query = search_params.get('q')
