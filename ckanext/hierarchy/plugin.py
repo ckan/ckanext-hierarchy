@@ -22,7 +22,7 @@ def custom_convert_from_extras(key, data, errors, context):
     data[key] = ""
 
     to_remove = []
-    for data_key in data.keys():
+    for data_key in list(data.keys()):
         if (data_key[0] == 'extras'):
             data_value = data[data_key]
             if 'key' in data_value and data_value['key'] == key[-1]:
