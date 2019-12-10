@@ -1,14 +1,15 @@
 import logging
+import os
 
 import ckan.plugins as p
 from ckan import model
 from ckan.lib.plugins import DefaultOrganizationForm
-from ckan.common import c
 
 from ckanext.hierarchy.logic import action
 from ckanext.hierarchy import helpers
 
 log = logging.getLogger(__name__)
+c = p.toolkit.c
 
 # This plugin is designed to work only these versions of CKAN
 p.toolkit.check_ckan_version(min_version='2.0')
@@ -45,9 +46,18 @@ class HierarchyDisplay(p.SingletonPlugin):
 
     def update_config(self, config):
         p.toolkit.add_template_directory(config, 'templates')
-        p.toolkit.add_template_directory(config, 'public')
-        p.toolkit.add_resource('public/scripts/vendor/jstree', 'jstree')
+        p.toolkit.add_public_directory(config, 'fanstatic')
         p.toolkit.add_resource('fanstatic', 'hierarchy')
+
+        try:
+            from ckan.lib.webassets_tools import add_public_path
+        except ImportError:
+            pass
+        else:
+            asset_path = os.path.join(
+                os.path.dirname(__file__), 'fanstatic'
+            )
+            add_public_path(asset_path, '/')
 
     # IActions
 
@@ -158,8 +168,6 @@ class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
         return 'organization'
 
     def setup_template_variables(self, context, data_dict):
-        from pylons import tmpl_context as c
-
         group_id = data_dict.get('id')
         c.allowable_parent_groups = \
             helpers.get_allowable_parent_groups(group_id)
