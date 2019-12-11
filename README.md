@@ -87,6 +87,7 @@ To install ckanext-hierarchy:
 
        cd /usr/lib/ckan/default/src
        pip install -e "git+https://github.com/davidread/ckanext-hierarchy.git#egg=ckanext-hierarchy"
+       pip install -r ckanext-hierarchy/requirements.txt
 
 3. Add ``hierarchy_display`` and ``hierarchy_form`` to the ``ckan.plugins`` setting in your CKAN
    config file (by default the config file is located at
@@ -156,4 +157,3 @@ To publish a new version to PyPI follow these steps:
 This module is openly licensed with AGPLv3 - see LICENSE file.
 
 Copyright belongs to commit authors. Commits 2013-2017 by @davidread are Crown Copyright.
-

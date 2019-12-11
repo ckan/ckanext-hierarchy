@@ -1,5 +1,6 @@
 '''Tests that this extension doesn't break unrelated things'''
 
+from builtins import object
 import nose.tools
 
 from ckan.tests import helpers
