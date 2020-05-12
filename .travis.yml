@@ -1,44 +1,46 @@
-language: python
-sudo: required
-
-# use an older trusty image, because the newer images cause build errors with
-# psycopg2 that comes with CKAN<2.8:
-#   "Error: could not determine PostgreSQL version from '10.1'"
-# see https://github.com/travis-ci/travis-ci/issues/8897
 dist: trusty
-group: deprecated-2017Q4
 
-# matrix
-python:
-  - 2.7
-env:
-  - CKANVERSION=master
-  - CKANVERSION=2.7
-  - CKANVERSION=2.8
+os: linux
+language: python
 
-# tests
-services:
-  - postgresql
-  - redis-server
 install:
-  - bash bin/travis-build.bash
-  - pip install coveralls
-script: sh bin/travis-run.sh
-after_success:
-  - coveralls
+    - bash bin/travis-build.bash
+services:
+    - redis
+    - postgresql
 
-# additional jobs
-matrix:
+script: bash bin/travis-run.bash
+before_install:
+    - pip install codecov
+after_success:
+    - codecov
+
+jobs:
   include:
-    - name: "Flake8 on Python 3.7"
-      dist: xenial    # required for Python 3.7
-      cache: pip
-      install: pip install flake8
+    - stage: Flake8
+      python: 2.7
+      env: FLAKE8=True
+      install:
+        - pip install flake8==3.5.0
+        - pip install pycodestyle==2.3.0
       script:
         - flake8 --version
-        - flake8 . --count --max-complexity=10 --max-line-length=127 --statistics --exclude ckan,ckanext-hierarchy
-      python: 3.7
-      # overwrite matrix
-      env:
-        - FLAKE8=true
-        - CKANVERSION=master
+        # stop the build if there are Python syntax errors or undefined names
+        - flake8 . --count --select=E901,E999,F821,F822,F823 --show-source --statistics --exclude ckan
+        # exit-zero treats all errors as warnings.  The GitHub editor is 127 chars wide
+        # - flake8 . --count --max-line-length=127 --statistics --exclude ckan --exit-zero
+    - stage: Tests
+      python: "2.7"
+      env: CKANVERSION=master
+    - python: "3.6"
+      env: CKANVERSION=master
+    - python: "2.7"
+      env: CKANVERSION=2.8
+    - python: "2.7"
+      env: CKANVERSION=2.7
+    - python: "2.7"
+      env: CKANVERSION=2.6
+
+cache:
+  directories:
+    - $HOME/.cache/pip

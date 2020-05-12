@@ -92,8 +92,8 @@ def get_allowable_parent_groups(group_id):
     return allowable_parent_groups
 
 
-def is_include_children_selected(fields):
+def is_include_children_selected():
     include_children_selected = False
-    if request.params.get('include_children'):
+    if request.params.get('ext_include_children'):
         include_children_selected = True
     return include_children_selected

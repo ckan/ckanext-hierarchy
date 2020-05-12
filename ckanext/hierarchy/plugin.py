@@ -89,33 +89,19 @@ class HierarchyDisplay(p.SingletonPlugin):
         # Check if we're called from the organization controller, as detected
         # by c being registered for this thread, and the existence of c.fields
         # values
+
         try:
-            if not isinstance(c.fields, list) and not hasattr(c, 'fields'):
+            if c.controller != 'organization' or c.action != 'read' \
+               or not isinstance(c.fields, list):
                 return search_params
-        except TypeError:
-            return search_params
-        except AttributeError:
+        except (TypeError, AttributeError):
             return search_params
 
         # e.g. search_params['q'] = u' owner_org:"id" include_children: "True"'
-        query = search_params.get('q')
-        fq = search_params.get('fq')
+        query = search_params.get('q', '')
+        fq = search_params.get('fq', '')
 
-        # Fix the issues with multiple times repeated fields
-        # Remove the param from the fields - NB no longer works
-        # e.g. [('include_children', 'True')]
-        new_fields = set()
-        for field, value in c.fields:
-            if (field != 'include_children'):
-                new_fields.add((field, value))
-        c.fields = list(new_fields)
-
-        # parse the query string to check if children are requested
-        c.include_children_selected = query and \
-            'include_children: "True"' in query
-
-        if c.include_children_selected:
-
+        if p.toolkit.h.is_include_children_selected():
             # get a list of all the children organizations and include them in
             # the search params
             children_org_hierarchy = model.Group.get(c.group_dict.get('id')).\
@@ -124,7 +110,7 @@ class HierarchyDisplay(p.SingletonPlugin):
 
             # remove include_children clause - it is a message for this func,
             # not solr
-            query = query.replace('include_children: "True"', '')
+            query = query.replace('ext_include_children: "True"', '')
 
             if children_names:
                 # remove existing owner_org:"<parent>" clause - we'll replace
@@ -133,7 +119,7 @@ class HierarchyDisplay(p.SingletonPlugin):
                 # CKAN<=2.7 it's in the q field:
                 query = query.replace(owner_org_q, '')
                 # CKAN=2.8.x it's in the fq field:
-                search_params['fq'] = fq.replace(owner_org_q, '')
+                search_params['fq'] = fq.replace('+' + owner_org_q, '').replace(owner_org_q, '')
 
                 # add the org clause
                 query = query.strip()
@@ -147,11 +133,7 @@ class HierarchyDisplay(p.SingletonPlugin):
 
             search_params['q'] = query.strip()
 
-            # add it back to fields
-            # c.fields += [('include_children', 'True')]
-
-            # remove include_children from the filter-list - we have a checkbox
-            del c.fields_grouped['include_children']
+            c.fields_grouped.pop('ext_include_children', None)
 
         return search_params
 

@@ -1,4 +1,4 @@
-#!/bin/bash
+    #nex!/bin/bash
 set -e
 
 echo "This is travis-build.bash..."
@@ -6,6 +6,13 @@ echo "This is travis-build.bash..."
 echo "Installing the packages that CKAN requires..."
 sudo apt-get update -qq
 sudo apt-get install solr-jetty
+
+if python -c 'import sys;exit(sys.version_info < (3,))'
+then
+    PYTHONVERSION=3
+else
+    PYTHONVERSION=2
+fi
 
 echo "Installing CKAN and its Python dependencies..."
 git clone https://github.com/ckan/ckan
@@ -19,44 +26,40 @@ else
     echo "CKAN version: ${CKAN_TAG#ckan-}"
 fi
 
-# install the recommended version of setuptools
 if [ -f requirement-setuptools.txt ]
 then
-    echo "Updating setuptools..."
     pip install -r requirement-setuptools.txt
 fi
-
-if [ $CKANVERSION == '2.7' ]
-then
-    echo "Installing setuptools"
-    pip install setuptools==39.0.1
-fi
-
 python setup.py develop
-if [ -f requirements-py2.txt ]
+
+if [ -f requirements-py2.txt ] && [ $PYTHONVERSION = 2 ]
 then
-    pip install -r requirements-py2.txt
+    grep -v psycopg2 < requirements-py2.txt > reqs.txt
 else
-    pip install -r requirements.txt
+    grep -v psycopg2 < requirements.txt > reqs.txt
 fi
+pip install psycopg2==2.7.7  # workaround travis 10 psycopg2 incompatibility
+pip install -r reqs.txt
 pip install -r dev-requirements.txt
 cd -
+
+echo "Setting up Solr..."
+printf "NO_START=0\nJETTY_HOST=127.0.0.1\nJETTY_PORT=8983\nJAVA_HOME=$JAVA_HOME" | sudo tee /etc/default/jetty
+sudo cp ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
+sudo service jetty restart
 
 echo "Creating the PostgreSQL user and database..."
 sudo -u postgres psql -c "CREATE USER ckan_default WITH PASSWORD 'pass';"
 sudo -u postgres psql -c 'CREATE DATABASE ckan_test WITH OWNER ckan_default;'
 
-echo "Setting up Solr..."
-# Solr is multicore for tests on ckan master, but it's easier to run tests on
-# Travis single-core. See https://github.com/ckan/ckan/issues/2972
-sed -i -e 's/solr_url.*/solr_url = http:\/\/127.0.0.1:8983\/solr/' ckan/test-core.ini
-printf "NO_START=0\nJETTY_HOST=127.0.0.1\nJETTY_PORT=8983\nJAVA_HOME=$JAVA_HOME" | sudo tee /etc/default/jetty
-sudo cp ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
-sudo service jetty restart
-
 echo "Initialising the database..."
 cd ckan
-paster db init -c test-core.ini
+if [ $CKANVERSION \< '2.9' ]
+then
+    paster db init -c test-core.ini
+else
+    ckan -c test-core.ini db init
+fi
 cd -
 
 echo "Installing ckanext-hierarchy and its requirements..."
@@ -64,8 +67,13 @@ python setup.py develop
 pip install -r dev-requirements.txt
 pip install -r requirements.txt
 
+echo "Updating solr_url to single core"
+sed -i -e 's/use = config:..\/ckan\/test-core.ini/use = config:..\/ckan\/test-core.ini\nsolr_url = http:\/\/127.0.0.1:8983\/solr/' test*.ini
+
+
 echo "Moving test.ini into a subdir..."
 mkdir subdir
 mv test.ini subdir
+mv test_subclass.ini subdir
 
 echo "travis-build.bash is done."
