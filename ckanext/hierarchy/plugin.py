@@ -1,10 +1,12 @@
+import ckan.authz as authz
+import ckan.model as model
 import ckan.plugins as p
 from ckanext.hierarchy.logic import action
 from ckanext.hierarchy import helpers
 from ckan.lib.plugins import DefaultOrganizationForm
 from ckan.lib.plugins import DefaultGroupForm
 import ckan.logic.schema as s
-from ckan.common import c, request
+from ckan.common import c, request, config
 import logging
 import re
 
@@ -131,8 +133,72 @@ class HierarchyDisplay(p.SingletonPlugin):
 
 class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
 
+    p.implements(p.ITemplateHelpers)
     p.implements(p.IGroupForm, inherit=True)
 
+    def show_top_level_option(self, group_id, selected_parent):
+        user = p.toolkit.c.user
+        # No restrictions for `sysadmin` users
+        if authz.is_sysadmin(user):
+            return True
+        else:
+            # Only apply this behaviour if role cascading disabled..
+            role_cascading_enabled = config.get('ckan.auth.roles_that_cascade_to_sub_groups', False)
+
+            if not role_cascading_enabled:
+                # It has to be an edit / manage action and
+                # the organisation being managed has to be a top level org
+                if c.controller == 'organization' and c.action == 'edit' \
+                        and group_id and not selected_parent:
+                    return True
+            else:
+                return True
+
+
+    def get_allowable_parent_groups(self, group_id):
+
+        role_cascading_enabled = config.get('ckan.auth.roles_that_cascade_to_sub_groups', False)
+
+        # Default behaviour
+        allowable_parent_groups = helpers.get_allowable_parent_groups(group_id)
+
+        user = p.toolkit.c.user
+
+        # No restrictions for `sysadmin` users
+        if authz.is_sysadmin(user) or role_cascading_enabled:
+            return allowable_parent_groups
+
+        # Get the users organisations
+        organization_list_for_user = \
+            p.toolkit.get_action('organization_list_for_user')({'user': user}, {'permission': None})
+
+        # Get the org/group name for those
+        user_allowed_orgs = [org['name'] for org in organization_list_for_user]
+
+        if group_id:
+            group = model.Group.get(group_id)
+
+            # Get the org/name of the parent group for this group
+            parent = group.get_parent_groups('organization')
+
+            if parent:
+                parent = parent.pop(0)
+
+            if parent and parent.name not in user_allowed_orgs:
+                user_allowed_orgs.append(parent.name)
+
+        # Loop through the original allowed parent groups list, only picking those also in the users organization
+        # list and the parent org (if managing an existing org)
+
+        return [org for org in allowable_parent_groups
+                     if org.name in user_allowed_orgs]
+
+    ## ITemplateHelpers interface ##
+
+    def get_helpers(self):
+        return {
+            'show_top_level_option': self.show_top_level_option,
+        }
 
     # IGroupForm
 
@@ -146,4 +212,5 @@ class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
         from pylons import tmpl_context as c
 
         group_id = data_dict.get('id')
-        c.allowable_parent_groups = helpers.get_allowable_parent_groups(group_id)
+
+        c.allowable_parent_groups = self.get_allowable_parent_groups(group_id)

@@ -2,9 +2,12 @@
   <label class="control-label" for="field-parent">{{ _("Parent") }}</label>
   <div class="controls">
     <select id="field-parent" name="groups__0__name" data-module="autocomplete">
+      {% set allowable_parent_groups = c.allowable_parent_groups %}
       {% set selected_parent = (data.get('groups') or [{'name': ''}])[0]['name'] %} {{ selected_parent }}
+      {% if h.show_top_level_option(data.id, selected_parent) %}
       <option value="" {% if not selected_parent %} selected="selected" {% endif %}>{{ _('None - top level') }}</option>
-      {% for group in c.allowable_parent_groups or h.get_allowable_parent_groups(data.id) %}
+      {% endif %}
+      {% for group in allowable_parent_groups %}
         <option value="{{ group.name }}" {% if group.name == selected_parent %}selected="selected"{% endif %}>{{ group.title }}</option>
       {% endfor %}
     </select>
