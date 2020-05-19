@@ -1,5 +1,7 @@
 {% ckan_extends %}
 
+{% if group_dict is not defined %}{% set group_dict = c.group_dict %}{% endif %}
+
 {% block heading %}
     <h1 class="heading">
         {% if organization.longname %}
@@ -15,8 +17,8 @@
 
 {% block description %}
     {{ super() }}
-    {% if c.group_dict %} 
+    {% if group_dict %}
         <hr>
-        {% snippet 'organization/snippets/organization_tree.html', top_nodes=[h.group_tree_section(id_=c.group_dict.id, type_=c.group_dict.type, include_siblings=False)], use_shortnames=True %}
-    {% endif %}    
+        {% snippet 'organization/snippets/organization_tree.html', top_nodes=[h.group_tree_section(id_=group_dict.id, type_=group_dict.type, include_siblings=False)], use_shortnames=True %}
+    {% endif %}
 {% endblock %}

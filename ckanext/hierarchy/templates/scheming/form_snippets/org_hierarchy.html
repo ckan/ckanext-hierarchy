@@ -1,3 +1,5 @@
+{% if allowable_parent_groups is not defined %}{% set allowable_parent_groups = c.allowable_parent_groups %}{% endif %}
+
 <div class="control-group">
   <label class="control-label" for="field-parent">{{ _("Parent") }}</label>
   <div class="controls">
