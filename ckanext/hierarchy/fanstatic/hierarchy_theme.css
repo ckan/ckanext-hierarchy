@@ -1,28 +1,28 @@
 
 ul.hierarchy-tree-top {
-     list-style-type: disc; 
+     list-style-type: disc;
      background: none;
 }
 
 ul.hierarchy-tree {
-     list-style-type: none; 
-     background: url(images/vline.png) repeat-y; 
-     margin: 0; padding: 0; 
+     list-style-type: none;
+     background: url("images/vline.png") repeat-y;
+     margin: 0; padding: 0;
 }
 
 ul.hierarchy-tree {
-     margin-left: 10px; 
-} 
+     margin-left: 10px;
+}
 
-ul.hierarchy-tree li { 
-     margin: 0; 
-     padding: 0 12px; 
+ul.hierarchy-tree li {
+     margin: 0;
+     padding: 0 12px;
      line-height: 20px;
-     background: url(images/node.png) no-repeat;
+     background: url("images/node.png") no-repeat;
 }
 
 ul.hierarchy-tree li:last-child {
-    background: #fff url(images/lastnode.png) no-repeat;
+    background: #fff url("images/lastnode.png") no-repeat;
 }
 
 ul.hierarchy-tree-top li a, ul.hierarchy-tree li a{
@@ -36,4 +36,3 @@ ul.hierarchy-tree-top li.highlighted > a, ul.hierarchy-tree li.highlighted > a {
      /*text-decoration: underline;*/
      text-shadow: 1px 1px #dddddd;
 }
-
