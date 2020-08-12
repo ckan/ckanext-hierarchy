@@ -5,8 +5,7 @@ from ckan.common import request
 
 def group_tree(organizations=[], type_='organization'):
     full_tree_list = p.toolkit.get_action('group_tree')({}, {'type': type_})
-
-    if not organizations:
+    if not organizations or 1:
         return full_tree_list
     else:
         filtered_tree_list = group_tree_filter(organizations, full_tree_list)

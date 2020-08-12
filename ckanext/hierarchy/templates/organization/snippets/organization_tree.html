@@ -27,7 +27,7 @@ Example:
       {% if node.highlighted %}
           <li class="highlighted" id="node_{{ node.name }}">
       {% else %}
-          <li id="node_{{ node.name }}">
+          <li class="open" id="node_{{ node.name }}">
       {% endif %}
       {% link_for display_text, controller='organization', action='read', id=node.name %}
       {% if node.children %}
