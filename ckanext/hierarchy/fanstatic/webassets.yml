@@ -1,0 +1,13 @@
+hierarchy_js:
+  filter: rjsmin
+  output: ckanext-hierarchy/%(version)s_hierarchy.js
+  extra:
+    preload:
+      - base/main
+  contents:
+    - jquery.hierarchy.js
+hierarchy_css:
+  filters: cssrewrite
+  output: ckanext-hierarchy/%(version)s_hierarchy.css
+  contents:
+    - hierarchy_theme.css
