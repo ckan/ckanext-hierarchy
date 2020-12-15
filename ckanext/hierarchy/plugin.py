@@ -94,7 +94,7 @@ class HierarchyDisplay(p.SingletonPlugin):
             if c.controller != 'organization' or c.action != 'read' \
                or not isinstance(c.fields, list):
                 return search_params
-        except (TypeError, AttributeError):
+        except (TypeError, AttributeError, RuntimeError):
             return search_params
 
         # e.g. search_params['q'] = u' owner_org:"id" include_children: "True"'
