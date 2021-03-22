@@ -12,12 +12,12 @@
             {% endfor %}
             <li>{% link_for organization|truncate(30), controller='organization', action='read', id=pkg.organization.name %}</li>
         {% else %}
-            <li>{% link_for _('Datasets'), controller='dataset' if h.ckan_version() > '2.9' else 'package', action='search' %}</li>
+            <li>{% link_for _('Datasets'), controller='dataset' if h.ckan_version().split('.')[1] | int >= 9 else 'package', action='search' %}</li>
         {% endif %}
-        <li{{ self.breadcrumb_content_selected() }}>{% link_for dataset|truncate(30), controller='dataset' if h.ckan_version() > '2.9' else 'package', action='read', id=pkg.name %}</li>
+        <li{{ self.breadcrumb_content_selected() }}>{% link_for dataset|truncate(30), controller='dataset' if h.ckan_version().split('.')[1] | int >= 9 else 'package', action='read', id=pkg.name %}</li>
     {% else %}
 
-        <li>{% link_for _('Datasets'), controller='dataset' if h.ckan_version() > '2.9' else 'package', action='search' %}</li>
+        <li>{% link_for _('Datasets'), controller='dataset' if h.ckan_version().split('.')[1] | int >= 9 else 'package', action='search' %}</li>
         <li class="active"><a href="">{{ _('Create Dataset') }}</a></li>
     {% endif %}
 
