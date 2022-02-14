@@ -112,7 +112,7 @@ class HierarchyDisplay(p.SingletonPlugin):
 
         # parse the query string to check if children are requested
         c.include_children_selected = query and \
-            'include_children: "True"' in query
+            'include_children:"True"' in fq
 
         if c.include_children_selected:
 
@@ -124,7 +124,7 @@ class HierarchyDisplay(p.SingletonPlugin):
 
             # remove include_children clause - it is a message for this func,
             # not solr
-            query = query.replace('include_children: "True"', '')
+            query = query.replace('include_children:"True"', '')
 
             if children_names:
                 # remove existing owner_org:"<parent>" clause - we'll replace
@@ -133,7 +133,7 @@ class HierarchyDisplay(p.SingletonPlugin):
                 # CKAN<=2.7 it's in the q field:
                 query = query.replace(owner_org_q, '')
                 # CKAN=2.8.x it's in the fq field:
-                search_params['fq'] = fq.replace(owner_org_q, '')
+                search_params['fq'] = query
 
                 # add the org clause
                 query = query.strip()
