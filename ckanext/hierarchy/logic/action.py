@@ -47,7 +47,6 @@ def group_tree_section(context, data_dict):
     if include_parents:
         root_group = (group.get_parent_group_hierarchy(type=group_type)
                       or [group])[0]
-        print(root_group)
     else:
         root_group = group
     if include_siblings or root_group == group:
