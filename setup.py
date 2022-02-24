@@ -82,6 +82,7 @@ setup(
         [ckan.plugins]
         hierarchy_display=ckanext.hierarchy.plugin:HierarchyDisplay
         hierarchy_form=ckanext.hierarchy.plugin:HierarchyForm
+        hierarchy_group_form=ckanext.hierarchy.plugin:HierarchyGroupForm
 
         [babel.extractors]
         ckan = ckan.lib.extract:extract_ckan

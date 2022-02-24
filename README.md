@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/pypi/l/ckanext-hierarchy.svg)](https://pypi.org/project/ckanext-hierarchy/)
 
 
-# ckanext-hierarchy - Organization hierarchy for CKAN
+# ckanext-hierarchy - Organization and Groups hierarchy for CKAN
 
 Organizations can be arranged into a tree hierarchy.
 
@@ -92,7 +92,7 @@ To install ckanext-hierarchy:
 3. Add ``hierarchy_display`` and ``hierarchy_form`` to the ``ckan.plugins`` setting in your CKAN
    config file (by default the config file is located at
    ``/etc/ckan/default/production.ini``). Note that hierarchy_display
-should come before hierarchy_form
+should come before hierarchy_form and if you also need hirerarchy on groups add `hierarchy_group_form` in plugins list.
 
    e.g.:
 

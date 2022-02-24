@@ -58,7 +58,10 @@ def group_tree_parents(id_, type_='organization'):
 
 
 def group_tree_get_longname(id_, default="", type_='organization'):
-    tree_node = p.toolkit.get_action('organization_show')({}, {'id': id_})
+    if type_ == 'organization':
+        tree_node = p.toolkit.get_action('organization_show')({}, {'id': id_})
+    else:
+        tree_node = p.toolkit.get_action('group_show')({}, {'id': id_})
     longname = tree_node.get("longname", default)
     if not longname:
         return default
@@ -81,14 +84,14 @@ def group_tree_highlight(organizations, group_tree_list):
     return group_tree_list
 
 
-def get_allowable_parent_groups(group_id):
+def get_allowable_parent_groups(group_id, _type='organization'):
     if group_id:
         group = model.Group.get(group_id)
         allowable_parent_groups = \
-            group.groups_allowed_to_be_its_parent(type='organization')
+            group.groups_allowed_to_be_its_parent(type=_type)
     else:
         allowable_parent_groups = model.Group.all(
-            group_type='organization')
+            group_type=_type)
     return allowable_parent_groups
 
 

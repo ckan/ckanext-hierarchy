@@ -3,11 +3,9 @@
 {% if q is not defined %}{% set q = c.q %}{% endif %}
 {% if fields_grouped is not defined %}{% set fields_grouped = c.fields_grouped %}{% endif %}
 {% if search_facetssearch_facets is not defined %}{% set search_facets = c.search_facets %}{% endif %}
-{% if search_facets is not defined %}{% set search_facets = c.search_facets %}{% endif %}
 {% if facet_titles is not defined %}{% set facet_titles = c.facet_titles %}{% endif %}
 {% if translated_fields is not defined %}{% set translated_fields = c.translated_fields %}{% endif %}
 {% if remove_field is not defined %}{% set remove_field = c.remove_field %}{% endif %}
-{% if q is not defined %}{% set q = c.q %}{% endif %}
 {% if sort_by_selected is not defined %}{% set sort_by_selected = c.sort_by_selected %}{% endif %}
 {% if fields is not defined %}{% set fields = c.fields %}{% endif %}
 {% if page is not defined %}{% set page = c.page %}{% endif %}
@@ -29,5 +27,5 @@
         (_('Last Modified'), 'metadata_modified desc'),
         (_('Popular'), 'views_recent desc') if g.tracking_enabled else (false, false) ]
     %}
-    {% snippet 'snippets/search_form.html', form_id='organization-datasets-search-form', type='dataset', group_type="organization",  query=q, sorting=sorting, sorting_selected=sort_by_selected, count=page.item_count, facets=facets, placeholder=_('Search datasets...'), show_empty=request.params, fields=fields, include_children_option=true %}
+    {% snippet 'snippets/search_form.html', form_id='group-datasets-search-form', type='dataset', group_type="group", query=q, sorting=sorting, sorting_selected=sort_by_selected, count=page.item_count, facets=facets, placeholder=_('Search datasets...'), show_empty=request.params, fields=fields, include_children_option=true %}
 {% endblock %}
