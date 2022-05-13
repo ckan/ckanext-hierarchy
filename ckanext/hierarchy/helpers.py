@@ -74,8 +74,6 @@ def group_tree_highlight(organizations, group_tree_list):
             group_tree['highlighted'] = True
         else:
             group_tree['highlighted'] = False
-        for child in group_tree.get('children', []):
-            traverse_highlight(child, name_list)
 
     selected_names = [o.get('name', None) for o in organizations]
 
