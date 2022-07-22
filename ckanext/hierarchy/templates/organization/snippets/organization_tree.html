@@ -14,7 +14,7 @@ Example:
 
 #}
 
-{% set type = 'asset' if h.check_ckan_version(min_version='2.10') else 'resource' %}
+{% set type = 'asset' if h.check_ckan_version(min_version='2.9') else 'resource' %}
 {% include 'hierarchy/snippets/hierarchy_' ~ type ~ '.html' %}
 
 <ul class="hierarchy-tree-top">
