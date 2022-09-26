@@ -1,16 +1,16 @@
 {#
-Displays a tree of organzations
+Displays a tree of groups
 
 NB This template can be slow because it is recursive and uses link_for. At
 DGU we speeded up display of the tree 10 times (necessary as we have 1000
-organizations) by replacing this template with a recursive code routine:
+groups) by replacing this template with a recursive code routine:
 https://github.com/datagovuk/ckanext-dgu/blob/5fb78b354517c2198245bdc9c98fb5d6c82c6bcc/ckanext/dgu/lib/helpers.py#L140
 
-orgs    - List of organizations
+orgs    - List of groups
 
 Example:
 
-{% snippet 'organization/snippets/organization_tree.html', top_nodes=h.group_tree(type_='organization'), use_longnames=False %}
+{% snippet 'group/snippets/group_tree.html', top_nodes=h.group_tree(type_='group'), use_longnames=False %}
 
 #}
 
@@ -19,7 +19,7 @@ Example:
 
 <ul class="hierarchy-tree-top">
   {% for node in top_nodes recursive %}
-      {% set longname = h.group_tree_get_longname(node.name, type_='organization') %}
+      {% set longname = h.group_tree_get_longname(node.name, type_='group') %}
       {% set display_text = node.title %}
       {% if use_longnames and longname%}
           {% set display_text = longname + " (" + display_text + ")" %}
@@ -29,7 +29,7 @@ Example:
       {% else %}
           <li id="node_{{ node.name }}">
       {% endif %}
-      {% link_for display_text, controller='organization', action='read', id=node.name %}
+      {% link_for display_text, controller='group', action='read', id=node.name %}
       {% if node.children %}
         <ul class="hierarchy-tree"> {{ loop(node.children) }} </ul>
       {% endif %}

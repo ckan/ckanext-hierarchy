@@ -3,13 +3,13 @@ import ckan.model as model
 from ckan.common import request
 
 
-def group_tree(organizations=[], type_='organization'):
+def group_tree(type_, groups=[]):
     full_tree_list = p.toolkit.get_action('group_tree')({}, {'type': type_})
 
-    if not organizations:
+    if not groups:
         return full_tree_list
     else:
-        filtered_tree_list = group_tree_filter(organizations, full_tree_list)
+        filtered_tree_list = group_tree_filter(groups, full_tree_list)
         return filtered_tree_list
 
 
@@ -38,7 +38,7 @@ def group_tree_filter(organizations, group_tree_list, highlight=False):
     return filtered_tree
 
 
-def group_tree_section(id_, type_='organization', include_parents=True,
+def group_tree_section(id_, type_, include_parents=True,
                        include_siblings=True):
     return p.toolkit.get_action('group_tree_section')(
         {'include_parents': include_parents,
@@ -46,19 +46,19 @@ def group_tree_section(id_, type_='organization', include_parents=True,
         {'id': id_, 'type': type_, })
 
 
-def group_tree_parents(id_, type_='organization'):
-    tree_node = p.toolkit.get_action('organization_show')({}, {'id': id_})
+def group_tree_parents(id_, type_):
+    tree_node = p.toolkit.get_action(type_+'_show')({}, {'id': id_})
     if (tree_node['groups']):
         parent_id = tree_node['groups'][0]['name']
         parent_node = \
-            p.toolkit.get_action('organization_show')({}, {'id': parent_id})
+            p.toolkit.get_action(type_+'_show')({}, {'id': parent_id})
         return group_tree_parents(parent_id) + [parent_node]
     else:
         return []
 
 
-def group_tree_get_longname(id_, default="", type_='organization'):
-    tree_node = p.toolkit.get_action('organization_show')({}, {'id': id_})
+def group_tree_get_longname(id_, type_, default=""):
+    tree_node = p.toolkit.get_action(type_+'_show')({}, {'id': id_})
     longname = tree_node.get("longname", default)
     if not longname:
         return default
@@ -81,14 +81,14 @@ def group_tree_highlight(organizations, group_tree_list):
     return group_tree_list
 
 
-def get_allowable_parent_groups(group_id):
+def get_allowable_parent_groups(group_id, group_type):
     if group_id:
         group = model.Group.get(group_id)
         allowable_parent_groups = \
-            group.groups_allowed_to_be_its_parent(type='organization')
+            group.groups_allowed_to_be_its_parent(type=group_type)
     else:
         allowable_parent_groups = model.Group.all(
-            group_type='organization')
+            group_type=group_type)
     return allowable_parent_groups
 
 
