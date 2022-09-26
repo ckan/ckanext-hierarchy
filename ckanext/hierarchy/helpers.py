@@ -3,13 +3,13 @@ import ckan.model as model
 from ckan.common import request
 
 
-def group_tree(type_, groups=[]):
+def group_tree(organizations=[], type_='organization'):
     full_tree_list = p.toolkit.get_action('group_tree')({}, {'type': type_})
 
-    if not groups:
+    if not organizations:
         return full_tree_list
     else:
-        filtered_tree_list = group_tree_filter(groups, full_tree_list)
+        filtered_tree_list = group_tree_filter(organizations, full_tree_list)
         return filtered_tree_list
 
 
@@ -38,7 +38,7 @@ def group_tree_filter(organizations, group_tree_list, highlight=False):
     return filtered_tree
 
 
-def group_tree_section(id_, type_, include_parents=True,
+def group_tree_section(id_, type_='organization', include_parents=True,
                        include_siblings=True):
     return p.toolkit.get_action('group_tree_section')(
         {'include_parents': include_parents,
@@ -46,7 +46,7 @@ def group_tree_section(id_, type_, include_parents=True,
         {'id': id_, 'type': type_, })
 
 
-def group_tree_parents(id_, type_):
+def group_tree_parents(id_, type_='organization'):
     tree_node = p.toolkit.get_action(type_+'_show')({}, {'id': id_})
     if (tree_node['groups']):
         parent_id = tree_node['groups'][0]['name']
@@ -57,7 +57,7 @@ def group_tree_parents(id_, type_):
         return []
 
 
-def group_tree_get_longname(id_, type_, default=""):
+def group_tree_get_longname(id_, default="", type_='organization'):
     tree_node = p.toolkit.get_action(type_+'_show')({}, {'id': id_})
     longname = tree_node.get("longname", default)
     if not longname:
@@ -81,14 +81,14 @@ def group_tree_highlight(organizations, group_tree_list):
     return group_tree_list
 
 
-def get_allowable_parent_groups(group_id, group_type):
+def get_allowable_parent_groups(group_id):
     if group_id:
         group = model.Group.get(group_id)
         allowable_parent_groups = \
-            group.groups_allowed_to_be_its_parent(type=group_type)
+            group.groups_allowed_to_be_its_parent(type=group.type)
     else:
         allowable_parent_groups = model.Group.all(
-            group_type=group_type)
+            group_type=p.toolkit.get_endpoint()[0])
     return allowable_parent_groups
 
 

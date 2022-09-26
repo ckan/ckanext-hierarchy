@@ -156,7 +156,7 @@ class HierarchyDisplay(p.SingletonPlugin):
         return search_params
 
 
-class HierarchyOrganizationForm(p.SingletonPlugin, DefaultOrganizationForm):
+class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
     p.implements(p.IGroupForm, inherit=True)
 
     # IGroupForm
@@ -169,9 +169,8 @@ class HierarchyOrganizationForm(p.SingletonPlugin, DefaultOrganizationForm):
 
     def setup_template_variables(self, context, data_dict):
         group_id = data_dict.get('id')
-        group_type = data_dict.get('type')
         c.allowable_parent_groups = \
-            helpers.get_allowable_parent_groups(group_id, group_type)
+            helpers.get_allowable_parent_groups(group_id)
 
 
 class HierarchyGroupForm(p.SingletonPlugin, DefaultGroupForm):
@@ -184,6 +183,5 @@ class HierarchyGroupForm(p.SingletonPlugin, DefaultGroupForm):
 
     def setup_template_variables(self, context, data_dict):
         group_id = data_dict.get('id')
-        group_type = data_dict.get('type')
         c.allowable_parent_groups = \
-            helpers.get_allowable_parent_groups(group_id, group_type)
+            helpers.get_allowable_parent_groups(group_id)

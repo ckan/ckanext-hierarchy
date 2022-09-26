@@ -81,7 +81,7 @@ setup(
     entry_points='''
         [ckan.plugins]
         hierarchy_display=ckanext.hierarchy.plugin:HierarchyDisplay
-        hierarchy_organization_form=ckanext.hierarchy.plugin:HierarchyOrganizationForm
+        hierarchy_form=ckanext.hierarchy.plugin:HierarchyForm
         hierarchy_group_form=ckanext.hierarchy.plugin:HierarchyGroupForm
 
         [babel.extractors]

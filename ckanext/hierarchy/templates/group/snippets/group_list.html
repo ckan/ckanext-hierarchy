@@ -14,7 +14,7 @@ Example:
      {% if q %}
      	{% set top_nodes = h.group_tree_highlight(groups, h.group_tree(type_='group')) %}
      {% else %}
-     	{% set top_nodes = h.group_tree(groups=groups, type_='group') %}
+     	{% set top_nodes = h.group_tree(organizations=groups, type_='group') %}
      {% endif %}
      {% snippet 'group/snippets/group_tree.html', top_nodes=top_nodes, use_longnames=True %}
 </div>
