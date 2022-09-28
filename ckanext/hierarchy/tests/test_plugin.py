@@ -7,7 +7,7 @@ class TestOrgPage():
 
     def test_search_parent_including_children(self, initial_data, app):
         parent_org, child_org, parent_dataset, child_dataset = \
-            initial_data()
+            initial_data
 
         response = app.get(
             url='/organization/parent_org?include_children=True')
@@ -17,7 +17,7 @@ class TestOrgPage():
 
     def test_search_parent_excluding_children(self, initial_data, app):
         parent_org, child_org, parent_dataset, child_dataset = \
-            initial_data()
+            initial_data
 
         response = app.get(
             url='/organization/parent_org')
@@ -27,7 +27,7 @@ class TestOrgPage():
 
     def test_search_child_including_children(self, initial_data, app):
         parent_org, child_org, parent_dataset, child_dataset = \
-            initial_data()
+            initial_data
 
         response = app.get(
             url='/organization/child_org?include_children=True')

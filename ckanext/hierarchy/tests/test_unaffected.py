@@ -9,7 +9,7 @@ class TestSearchApi():
 
     def test_package_search_is_unaffected(self, initial_data, app):
         parent_org, child_org, parent_dataset, child_dataset = \
-            initial_data()
+            initial_data
 
         # package_search API is unaffected by ckanext-hierarchy (only searches
         # via the front-end are affected)
@@ -27,6 +27,6 @@ class TestPages():
 
     def test_home_page(self, initial_data, app):
         parent_org, child_org, parent_dataset, child_dataset = \
-            initial_data()
+            initial_data
 
         app.get(url='/')
