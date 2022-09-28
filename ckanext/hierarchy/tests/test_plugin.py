@@ -1,8 +1,6 @@
 import pytest
 from bs4 import BeautifulSoup
 
-from ckan.tests import helpers
-
 from common import create_fixtures
 
 
