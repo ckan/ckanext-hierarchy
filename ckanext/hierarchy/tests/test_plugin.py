@@ -1,7 +1,7 @@
 import pytest
 from bs4 import BeautifulSoup
 
-from common import create_fixtures
+from .common import create_fixtures
 
 
 @pytest.mark.usefixtures('clean_db', 'clean_index')

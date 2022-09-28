@@ -3,7 +3,7 @@
 import pytest
 from ckan.tests import helpers
 
-from common import create_fixtures
+from .common import create_fixtures
 
 
 @pytest.mark.usefixtures('clean_db', 'clean_index')
