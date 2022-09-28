@@ -3,15 +3,13 @@
 import pytest
 from ckan.tests import helpers
 
-from .common import create_fixtures
-
 
 @pytest.mark.usefixtures('clean_db', 'clean_index')
 class TestSearchApi():
 
-    def test_package_search_is_unaffected(self, app):
+    def test_package_search_is_unaffected(self, initial_data, app):
         parent_org, child_org, parent_dataset, child_dataset = \
-            create_fixtures()
+            initial_data()
 
         # package_search API is unaffected by ckanext-hierarchy (only searches
         # via the front-end are affected)
@@ -27,8 +25,8 @@ class TestSearchApi():
 @pytest.mark.usefixtures('clean_db', 'clean_index')
 class TestPages():
 
-    def test_home_page(self, app):
+    def test_home_page(self, initial_data, app):
         parent_org, child_org, parent_dataset, child_dataset = \
-            create_fixtures()
+            initial_data()
 
         app.get(url='/')

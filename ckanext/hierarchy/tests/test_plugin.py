@@ -1,15 +1,13 @@
 import pytest
 from bs4 import BeautifulSoup
 
-from .common import create_fixtures
-
 
 @pytest.mark.usefixtures('clean_db', 'clean_index')
 class TestOrgPage():
 
-    def test_search_parent_including_children(self, app):
+    def test_search_parent_including_children(self, initial_data, app):
         parent_org, child_org, parent_dataset, child_dataset = \
-            create_fixtures()
+            initial_data()
 
         response = app.get(
             url='/organization/parent_org?include_children=True')
@@ -17,9 +15,9 @@ class TestOrgPage():
         search_results = scrape_search_results(response)
         assert search_results == set(('parent', 'child'))
 
-    def test_search_parent_excluding_children(self, app):
+    def test_search_parent_excluding_children(self, initial_data, app):
         parent_org, child_org, parent_dataset, child_dataset = \
-            create_fixtures()
+            initial_data()
 
         response = app.get(
             url='/organization/parent_org')
@@ -27,9 +25,9 @@ class TestOrgPage():
         search_results = scrape_search_results(response)
         assert search_results == set(('parent',))
 
-    def test_search_child_including_children(self, app):
+    def test_search_child_including_children(self, initial_data, app):
         parent_org, child_org, parent_dataset, child_dataset = \
-            create_fixtures()
+            initial_data()
 
         response = app.get(
             url='/organization/child_org?include_children=True')
