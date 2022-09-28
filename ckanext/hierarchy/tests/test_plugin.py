@@ -1,47 +1,39 @@
-import nose.tools
+import pytest
 from bs4 import BeautifulSoup
 
-from ckan.tests import helpers
 
-from common import create_fixtures
+@pytest.mark.usefixtures('clean_db', 'clean_index')
+class TestOrgPage():
 
-eq = nose.tools.assert_equals
-
-
-class TestOrgPage(helpers.FunctionalTestBase):
-
-    def test_search_parent_including_children(self):
+    def test_search_parent_including_children(self, initial_data, app):
         parent_org, child_org, parent_dataset, child_dataset = \
-            create_fixtures()
+            initial_data
 
-        app = self._get_test_app()
         response = app.get(
             url='/organization/parent_org?include_children=True')
 
         search_results = scrape_search_results(response)
-        eq(search_results, set(('parent', 'child')))
+        assert search_results == set(('parent', 'child'))
 
-    def test_search_parent_excluding_children(self):
+    def test_search_parent_excluding_children(self, initial_data, app):
         parent_org, child_org, parent_dataset, child_dataset = \
-            create_fixtures()
+            initial_data
 
-        app = self._get_test_app()
         response = app.get(
             url='/organization/parent_org')
 
         search_results = scrape_search_results(response)
-        eq(search_results, set(('parent',)))
+        assert search_results == set(('parent',))
 
-    def test_search_child_including_children(self):
+    def test_search_child_including_children(self, initial_data, app):
         parent_org, child_org, parent_dataset, child_dataset = \
-            create_fixtures()
+            initial_data
 
-        app = self._get_test_app()
         response = app.get(
             url='/organization/child_org?include_children=True')
 
         search_results = scrape_search_results(response)
-        eq(search_results, set(('child',)))
+        assert search_results == set(('child',))
 
 
 def scrape_search_results(response):

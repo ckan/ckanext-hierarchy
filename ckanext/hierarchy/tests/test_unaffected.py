@@ -1,22 +1,15 @@
 '''Tests that this extension doesn't break unrelated things'''
 
-from builtins import object
-import nose.tools
-
+import pytest
 from ckan.tests import helpers
 
-from common import create_fixtures
 
-eq = nose.tools.assert_equals
+@pytest.mark.usefixtures('clean_db', 'clean_index')
+class TestSearchApi():
 
-
-class TestSearchApi(object):
-    def setup(self):
-        helpers.reset_db()
-
-    def test_package_search_is_unaffected(self):
+    def test_package_search_is_unaffected(self, initial_data, app):
         parent_org, child_org, parent_dataset, child_dataset = \
-            create_fixtures()
+            initial_data
 
         # package_search API is unaffected by ckanext-hierarchy (only searches
         # via the front-end are affected)
@@ -26,16 +19,14 @@ class TestSearchApi(object):
         search_results = \
             [result['name'] for result in package_search_result['results']]
 
-        eq(set(search_results), set(('parent',)))
+        assert set(search_results) == set(('parent',))
 
 
-class TestPages(helpers.FunctionalTestBase):
-    def setup(self):
-        helpers.reset_db()
+@pytest.mark.usefixtures('clean_db', 'clean_index')
+class TestPages():
 
-    def test_home_page(self):
+    def test_home_page(self, initial_data, app):
         parent_org, child_org, parent_dataset, child_dataset = \
-            create_fixtures()
+            initial_data
 
-        app = self._get_test_app()
         app.get(url='/')
