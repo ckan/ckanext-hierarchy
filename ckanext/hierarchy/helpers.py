@@ -1,6 +1,6 @@
 import ckan.plugins as p
 import ckan.model as model
-from ckan.common import request
+from ckan.common import request, is_flask_request
 
 
 def group_tree(organizations=[], type_='organization'):
@@ -47,7 +47,11 @@ def group_tree_section(id_, type_='organization', include_parents=True,
 
 
 def group_tree_parents(id_, type_='organization'):
-    tree_node = p.toolkit.get_action('organization_show')({}, {'id': id_})
+    tree_node = p.toolkit.get_action('organization_show')({}, {'id': id_,
+                                                               'include_dataset_count': False,
+                                                               'include_users': False,
+                                                               'include_followers': False,
+                                                               'include_tags': False})
     if (tree_node['groups']):
         parent_id = tree_node['groups'][0]['name']
         parent_node = \
@@ -58,7 +62,11 @@ def group_tree_parents(id_, type_='organization'):
 
 
 def group_tree_get_longname(id_, default="", type_='organization'):
-    tree_node = p.toolkit.get_action('organization_show')({}, {'id': id_})
+    tree_node = p.toolkit.get_action('organization_show')({}, {'id': id_,
+                                                               'include_dataset_count': False,
+                                                               'include_users': False,
+                                                               'include_followers': False,
+                                                               'include_tags': False})
     longname = tree_node.get("longname", default)
     if not longname:
         return default
@@ -92,8 +100,9 @@ def get_allowable_parent_groups(group_id):
     return allowable_parent_groups
 
 
-def is_include_children_selected(fields):
+def is_include_children_selected():
     include_children_selected = False
-    if request.params.get('include_children'):
-        include_children_selected = True
+    if is_flask_request():
+        if request.params.get('include_children'):
+            include_children_selected = True
     return include_children_selected
