@@ -100,7 +100,15 @@ class HierarchyDisplay(p.SingletonPlugin):
         # e.g. search_params['q'] = u' owner_org:"id" include_children: "True"'
         query = search_params.get('q')
         fq = search_params.get('fq')
-
+        
+        if p.toolkit.get_endpoint() == ('group', 'read'):
+            group_selected = model.Group.get(c.group_dict.get('id'))
+            fq = ' OR '.join(
+                '{}'.format(grp.name)
+                for grp in group_selected.get_children_groups('group') + [group_selected]
+            )
+            search_params['fq'] = 'groups:({})'.format(fq)
+        
         # Fix the issues with multiple times repeated fields
         # Remove the param from the fields - NB no longer works
         # e.g. [('include_children', 'True')]
@@ -109,19 +117,19 @@ class HierarchyDisplay(p.SingletonPlugin):
             if (field != 'include_children'):
                 new_fields.add((field, value))
         c.fields = list(new_fields)
-
+        
         # parse the query string to check if children are requested
         c.include_children_selected = query and \
             'include_children: "True"' in query
-
+    
         if c.include_children_selected:
-
+            
             # get a list of all the children organizations and include them in
-            # the search params
+            # the search params           
             children_org_hierarchy = model.Group.get(c.group_dict.get('id')).\
                 get_children_group_hierarchy(type='organization')
             children_names = [org[1] for org in children_org_hierarchy]
-
+            
             # remove include_children clause - it is a message for this func,
             # not solr
             query = query.replace('include_children: "True"', '')
@@ -147,12 +155,9 @@ class HierarchyDisplay(p.SingletonPlugin):
 
             search_params['q'] = query.strip()
 
-            # add it back to fields
-            # c.fields += [('include_children', 'True')]
-
             # remove include_children from the filter-list - we have a checkbox
             del c.fields_grouped['include_children']
-
+           
         return search_params
 
 

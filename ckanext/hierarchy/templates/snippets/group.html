@@ -4,12 +4,12 @@
 
 {% block heading %}
     <h1 class="heading">
-        {% if group.longname %}
-           {{ group.longname }} ({{ group.title or group.name }})
+        {% if groups.longname %}
+           {{ groups.longname }} ({{ groups.title or groups.name }})
         {% else %}
-            {{ group.title or group.name }}
+            {{ groups.title or groups.name }}
         {% endif %}
-        {% if group.state == 'deleted' %}
+        {% if groups.state == 'deleted' %}
           [{{ _('Deleted') }}]
         {% endif %}
     </h1>
