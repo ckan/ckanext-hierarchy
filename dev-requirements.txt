@@ -1,3 +1,2 @@
-flake8
 pytest-ckan
 pytest-cov

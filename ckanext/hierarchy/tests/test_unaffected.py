@@ -4,7 +4,7 @@ import pytest
 from ckan.tests import helpers
 
 
-@pytest.mark.usefixtures('clean_db', 'clean_index')
+@pytest.mark.usefixtures('clean_db', 'clean_index', 'with_request_context')
 class TestSearchApi():
 
     def test_package_search_is_unaffected(self, initial_data, app):
@@ -22,7 +22,7 @@ class TestSearchApi():
         assert set(search_results) == set(('parent',))
 
 
-@pytest.mark.usefixtures('clean_db', 'clean_index')
+@pytest.mark.usefixtures('clean_db', 'clean_index', 'with_request_context')
 class TestPages():
 
     def test_home_page(self, initial_data, app):

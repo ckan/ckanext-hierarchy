@@ -2,7 +2,7 @@ import pytest
 from bs4 import BeautifulSoup
 
 
-@pytest.mark.usefixtures('clean_db', 'clean_index')
+@pytest.mark.usefixtures('clean_db', 'clean_index', 'with_request_context')
 class TestOrgPage():
 
     def test_search_parent_including_children(self, initial_data, app):
@@ -37,7 +37,11 @@ class TestOrgPage():
 
 
 def scrape_search_results(response):
-    soup = BeautifulSoup(response.body)
+    try:
+        body = response.data
+    except AttributeError:
+        body = response.body
+    soup = BeautifulSoup(body)
     dataset_names = set()
     for dataset_li in soup.find_all('li', class_='dataset-item'):
         dataset_names.add(dataset_li.find('a')['href'].split('/')[-1])
