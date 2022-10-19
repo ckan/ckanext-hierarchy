@@ -92,9 +92,8 @@ class HierarchyDisplay(p.SingletonPlugin):
         try:
             if not isinstance(c.fields, list) and not hasattr(c, 'fields'):
                 return search_params
-        except TypeError:
-            return search_params
-        except AttributeError:
+        except (TypeError, AttributeError, RuntimeError):
+            # it's non-organization controller or CLI call
             return search_params
 
         # e.g. search_params['q'] = u' owner_org:"id" include_children: "True"'
