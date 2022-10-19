@@ -6,6 +6,6 @@
 {% block search_input %}
      {{ super() }}
      {% if include_children_option %}
-       {{ form.checkbox('include_children', label="Include Sub-Organizations", checked=(h.is_include_children_selected(fields)), value=True, error=error) }}
+       {{ form.checkbox('include_children', label="Include Sub-Organizations", checked=(h.is_include_children_selected()), value=True, error=error) }}
      {% endif %}
 {% endblock %}
