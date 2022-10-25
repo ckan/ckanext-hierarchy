@@ -174,5 +174,5 @@ class HierarchyGroupForm(p.SingletonPlugin, DefaultGroupForm):
 
     def setup_template_variables(self, context, data_dict):
         group_id = data_dict.get('id')
-        c.allowable_parent_groups = \
+        g.allowable_parent_groups = \
             helpers.get_allowable_parent_groups(group_id)
