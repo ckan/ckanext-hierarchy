@@ -110,7 +110,6 @@ class HierarchyDisplay(p.SingletonPlugin):
             children_org_hierarchy = model.Group.get(g.group_dict.get('id')).\
                 get_children_group_hierarchy(type='organization')
             children_names = [org[1] for org in children_org_hierarchy]
-            
             # remove include_children clause - it is a message for this func,
             # not solr
             # CKAN<=2.7 it's in the q field:
