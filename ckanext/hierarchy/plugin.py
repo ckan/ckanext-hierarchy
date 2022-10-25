@@ -148,7 +148,7 @@ class HierarchyDisplay(p.SingletonPlugin):
             )
             groups_fq = 'groups:({})'.format(group_with_children)
             search_params['fq'] = fq.replace(
-                'groups:"{}"'.format(group_selected.name), 
+                'groups:"{}"'.format(group_selected.name),
                 groups_fq
             )
         return search_params
