@@ -55,7 +55,7 @@ def group_tree_parents(id_, type_='organization'):
     if (tree_node['groups']):
         parent_id = tree_node['groups'][0]['name']
         parent_node = \
-            p.toolkit.get_action('organization_show')({}, {'id': parent_id})
+            p.toolkit.get_action(type_+'_show')({}, {'id': parent_id})
         return group_tree_parents(parent_id) + [parent_node]
     else:
         return []
@@ -93,10 +93,10 @@ def get_allowable_parent_groups(group_id):
     if group_id:
         group = model.Group.get(group_id)
         allowable_parent_groups = \
-            group.groups_allowed_to_be_its_parent(type='organization')
+            group.groups_allowed_to_be_its_parent(type=group.type)
     else:
         allowable_parent_groups = model.Group.all(
-            group_type='organization')
+            group_type=p.toolkit.get_endpoint()[0])
     return allowable_parent_groups
 
 

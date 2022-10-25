@@ -1,0 +1,22 @@
+{% ckan_extends %}
+
+{% if group_dict is not defined %}
+    {% set group_dict = c.group_dict %}
+{% endif %}
+
+{% block page_heading %}
+  {% if group_dict.longname %}
+    {{ group_dict.longname }} ({{ group_dict.display_name }})
+  {% else %}
+      {{ super() }}
+  {% endif %}
+{% endblock %}
+
+{% block group_description %}
+  {{ super() }}
+
+  <div id="organization-tree">
+     {% snippet 'group/snippets/group_tree.html', top_nodes=[h.group_tree_section(id_=group_dict.id, type_=group_dict.type)], use_longnames=True %}
+  </div>
+
+{% endblock %}

@@ -1,0 +1,7 @@
+{% ckan_extends %}
+
+{% block basic_fields %}
+  {{ super() }}
+
+  {% snippet 'scheming/form_snippets/org_hierarchy.html', data=data %}
+{% endblock %}

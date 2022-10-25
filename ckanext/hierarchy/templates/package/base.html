@@ -6,7 +6,7 @@
         {% if pkg.organization %}
             {% set organization = pkg.organization.title %}
             <li>{% link_for _('Organizations'), controller='organization', action='index' %}</li>
-            {% set parent_list =  h.group_tree_parents(pkg.organization.name)  %}
+            {% set parent_list =  h.group_tree_parents(pkg.organization.name, type_='organization')  %}
             {% for parent_node in parent_list %}
                 <li>{% link_for  parent_node.title|truncate(35), controller='organization', action='read', id=parent_node.name %}</li>
             {% endfor %}

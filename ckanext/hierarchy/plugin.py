@@ -3,7 +3,7 @@ import os
 
 import ckan.plugins as p
 from ckan import model
-from ckan.lib.plugins import DefaultOrganizationForm
+from ckan.lib.plugins import DefaultOrganizationForm, DefaultGroupForm
 
 from ckanext.hierarchy.logic import action
 from ckanext.hierarchy import helpers
@@ -110,7 +110,7 @@ class HierarchyDisplay(p.SingletonPlugin):
             children_org_hierarchy = model.Group.get(g.group_dict.get('id')).\
                 get_children_group_hierarchy(type='organization')
             children_names = [org[1] for org in children_org_hierarchy]
-
+            
             # remove include_children clause - it is a message for this func,
             # not solr
             # CKAN<=2.7 it's in the q field:
@@ -161,4 +161,18 @@ class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
     def setup_template_variables(self, context, data_dict):
         group_id = data_dict.get('id')
         g.allowable_parent_groups = \
+            helpers.get_allowable_parent_groups(group_id)
+
+
+class HierarchyGroupForm(p.SingletonPlugin, DefaultGroupForm):
+    p.implements(p.IGroupForm, inherit=True)
+
+    # IGroupForm
+
+    def group_types(self):
+        return ('group',)
+
+    def setup_template_variables(self, context, data_dict):
+        group_id = data_dict.get('id')
+        c.allowable_parent_groups = \
             helpers.get_allowable_parent_groups(group_id)
