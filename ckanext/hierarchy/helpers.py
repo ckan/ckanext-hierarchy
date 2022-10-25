@@ -47,7 +47,7 @@ def group_tree_section(id_, type_='organization', include_parents=True,
 
 
 def group_tree_parents(id_, type_='organization'):
-    tree_node = p.toolkit.get_action('organization_show')({}, {'id': id_,
+    tree_node = p.toolkit.get_action(type_+'_show')({}, {'id': id_,
                                                                'include_dataset_count': False,
                                                                'include_users': False,
                                                                'include_followers': False,
@@ -62,7 +62,7 @@ def group_tree_parents(id_, type_='organization'):
 
 
 def group_tree_get_longname(id_, default="", type_='organization'):
-    tree_node = p.toolkit.get_action('organization_show')({}, {'id': id_,
+    tree_node = p.toolkit.get_action(type_+'_show')({}, {'id': id_,
                                                                'include_dataset_count': False,
                                                                'include_users': False,
                                                                'include_followers': False,

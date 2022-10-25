@@ -140,6 +140,17 @@ class HierarchyDisplay(p.SingletonPlugin):
             # remove include_children from the filter-list - we have a checkbox
             g.fields_grouped.pop('include_children', None)
 
+        if p.toolkit.get_endpoint() == ('group', 'read'):
+            group_selected = model.Group.get(g.group_dict.get('id'))
+            group_with_children = ' OR '.join(
+                '{}'.format(grp.name)
+                for grp in group_selected.get_children_groups('group') + [group_selected]
+            )
+            groups_fq = 'groups:({})'.format(group_with_children)
+            search_params['fq'] = fq.replace(
+                'groups:"{}"'.format(group_selected.name), 
+                groups_fq
+            )
         return search_params
 
     def before_search(self, search_params):
