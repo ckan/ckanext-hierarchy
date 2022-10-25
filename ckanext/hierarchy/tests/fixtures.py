@@ -1,8 +1,11 @@
+import pytest
+
 from ckan.tests import factories
 from ckan import model
 
 
-def create_fixtures():
+@pytest.fixture
+def initial_data():
     parent_org = factories.Organization(name='parent_org', title='Parent')
     child_org = factories.Organization(name='child_org', title='child')
     member = model.Member(
