@@ -10,6 +10,7 @@ from ckanext.hierarchy import helpers
 
 log = logging.getLogger(__name__)
 g = p.toolkit.g
+c = p.toolkit.c
 
 # This plugin is designed to work only these versions of CKAN
 p.toolkit.check_ckan_version(min_version='2.0')
@@ -140,8 +141,8 @@ class HierarchyDisplay(p.SingletonPlugin):
             # remove include_children from the filter-list - we have a checkbox
             g.fields_grouped.pop('include_children', None)
 
-        if g.group_dict.get('type') == 'group':
-            group_selected = model.Group.get(g.group_dict.get('id'))
+        if c.group_dict.get('type') == 'group':
+            group_selected = model.Group.get(c.group_dict.get('id'))
             group_with_children = ' OR '.join(
                 '{}'.format(grp.name)
                 for grp in group_selected.get_children_groups('group') + [group_selected]
