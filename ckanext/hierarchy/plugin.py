@@ -143,8 +143,7 @@ class HierarchyDisplay(p.SingletonPlugin):
 
         return search_params
 
-    def before_search(self, search_params):
-        return self.before_dataset_search(search_params)
+    before_search = before_dataset_search
 
 
 class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
