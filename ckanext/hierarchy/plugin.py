@@ -1,6 +1,5 @@
 import logging
 import os
-from urllib import request
 
 import ckan.plugins as p
 from ckan import model
