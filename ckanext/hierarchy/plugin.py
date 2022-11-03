@@ -1,5 +1,6 @@
 import logging
 import os
+from urllib import request
 
 import ckan.plugins as p
 from ckan import model
@@ -140,11 +141,10 @@ class HierarchyDisplay(p.SingletonPlugin):
             # remove include_children from the filter-list - we have a checkbox
             g.fields_grouped.pop('include_children', None)
 
-        if 'groups' in search_params['fq']:
-            group_selected = model.Group.get(search_params['fq'].split('"')[1])
+        if g.controller == 'group':
+            group_selected = g.group
             group_with_children = ' OR '.join(
-                '{}'.format(grp.name)
-                for grp in group_selected.get_children_groups('group') + [group_selected]
+                grp.name for grp in group_selected.get_children_groups('group') + [group_selected]
             )
             groups_fq = 'groups:({})'.format(group_with_children)
             search_params['fq'] = fq.replace(
