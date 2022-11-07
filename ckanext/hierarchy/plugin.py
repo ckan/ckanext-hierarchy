@@ -128,30 +128,24 @@ class HierarchyDisplay(p.SingletonPlugin):
                 # it with the tree of orgs or groups in a moment.
                 if controller == "organization":
                     group_q = 'owner_org:"{}"'.format(g.group_dict.get('id'))
+                    query_prefix = 'organization'
                 elif controller == "group":
                     group_q = 'groups:"{}"'.format(g.group_dict.get('name'))
+                    query_prefix = 'groups'
                 # CKAN<=2.7 it's in the q field:
                 query = query.replace(group_q, '')
                 # CKAN=2.8.x it's in the fq field:
                 fq = fq.replace(group_q, '')
                 # add the org or grp clause
                 query = query.strip()
-                if controller == "organization":
-                    if query:
-                        query += ' AND '
-                    query += '({})'.format(
-                        ' OR '.join(
-                            'organization:{}'.format(org_name)
-                            for org_name in [g.group_dict.get('name')] +
-                            children_names))
-                elif controller == "group":
-                    if query:
-                        query += ' AND '
-                    query += '({})'.format(
-                        ' OR '.join(
-                            'groups:{}'.format(grp_name)
-                            for grp_name in [g.group_dict.get('name')] +
-                            children_names))
+                if query:
+                    query += ' AND '
+                query += '({})'.format(
+                    ' OR '.join(
+                        query_prefix+':{}'.format(org_name)
+                        for org_name in [g.group_dict.get('name')] +
+                        children_names))
+
             search_params['q'] = query.strip()
             search_params['fq'] = fq
             # remove include_children from the filter-list - we have a checkbox
