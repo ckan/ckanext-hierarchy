@@ -126,8 +126,9 @@ class HierarchyDisplay(p.SingletonPlugin):
             if children_names:
                 # remove existing owner_org:"<parent>" or groups:"<parent>" clause - we'll replace
                 # it with the tree of orgs or groups in a moment.
-                group_q = 'owner_org:"{}"'.format(g.group_dict.get('id'))
-                if controller == "group":
+                if controller == "organization":
+                    group_q = 'owner_org:"{}"'.format(g.group_dict.get('id'))
+                elif controller == "group":
                     group_q = 'groups:"{}"'.format(g.group_dict.get('name'))
                 # CKAN<=2.7 it's in the q field:
                 query = query.replace(group_q, '')
@@ -135,29 +136,27 @@ class HierarchyDisplay(p.SingletonPlugin):
                 fq = fq.replace(group_q, '')
                 # add the org or grp clause
                 query = query.strip()
-                if query:
-                    query += ' AND '
-                query += '({})'.format(
-                    ' OR '.join(
-                        controller+':{}'.format(grp_name)
-                        for grp_name in [g.group_dict.get('name')] +
-                        children_names))
-
+                if controller == "organization":
+                    if query:
+                        query += ' AND '
+                    query += '({})'.format(
+                        ' OR '.join(
+                            'organization:{}'.format(org_name)
+                            for org_name in [g.group_dict.get('name')] +
+                            children_names))
+                elif controller == "group":
+                    if query:
+                        query += ' AND '
+                    query += '({})'.format(
+                        ' OR '.join(
+                            'groups:{}'.format(grp_name)
+                            for grp_name in [g.group_dict.get('name')] +
+                            children_names))
             search_params['q'] = query.strip()
             search_params['fq'] = fq
             # remove include_children from the filter-list - we have a checkbox
             g.fields_grouped.pop('include_children', None)
 
-        if controller == 'group':
-            group_selected = g.group
-            group_with_children = ' OR '.join(
-                grp.name for grp in group_selected.get_children_groups('group') + [group_selected]
-            )
-            groups_fq = 'groups:({})'.format(group_with_children)
-            search_params['fq'] = fq.replace(
-                'groups:"{}"'.format(group_selected.name),
-                groups_fq
-            )
         return search_params
 
     def before_search(self, search_params):
@@ -188,6 +187,9 @@ class HierarchyGroupForm(p.SingletonPlugin, DefaultGroupForm):
 
     def group_types(self):
         return ('group',)
+
+    def group_controller(self):
+        return 'group'
 
     def setup_template_variables(self, context, data_dict):
         group_id = data_dict.get('id')
