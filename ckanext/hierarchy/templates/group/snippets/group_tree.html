@@ -18,7 +18,7 @@ Example:
 {% include 'hierarchy/snippets/hierarchy_' ~ type ~ '.html' %}
 
 <ul class="hierarchy-tree-top">
-  {% for node in top_nodes recursive %}
+  {% for node in top_nodes recursive %} 
       {% set longname = h.group_tree_get_longname(node.name, type_='group') %}
       {% set display_text = node.title %}
       {% if use_longnames and longname%}
@@ -29,10 +29,19 @@ Example:
       {% else %}
           <li id="node_{{ node.name }}">
       {% endif %}
-      {% link_for display_text, controller='group', action='read', id=node.name %}
-      {% if node.children %}
-        <ul class="hierarchy-tree"> {{ loop(node.children) }} </ul>
-      {% endif %}
+      <div class="node-item">
+          {% link_for display_text, controller='group', action='read', id=node.name %}
+          {% if g.pkg_dict %}
+              {% set user_member = h.list_dict_filter(g.pkg_dict.groups, 'id', 'user_member', node.id) %}
+              {% if user_member == True %}
+                  {{ _('(associated)') }}
+                  <input name="group_remove.{{ node.name }}" value="{{ _('Remove') }}" type="submit" class="btn btn-danger btn-sm media-edit" title="{{ _('Remove dataset from this group') }}"/>
+              {% endif %}
+          {% endif %}
+      </div>
+          {% if node.children %}
+            <ul class="hierarchy-tree"> {{ loop(node.children) }} </ul>
+          {% endif %}
     </li>
   {% endfor %}
 </ul>
