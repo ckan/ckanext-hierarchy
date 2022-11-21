@@ -6,15 +6,15 @@
 [![License](https://img.shields.io/pypi/l/ckanext-hierarchy.svg)](https://pypi.org/project/ckanext-hierarchy/)
 
 
-# ckanext-hierarchy - Organization hierarchy for CKAN
+# ckanext-hierarchy - Organization and group hierarchy for CKAN
 
-Organizations can be arranged into a tree hierarchy.
+Organizations and groups can be arranged into a tree hierarchy.
 
-This new hierarchical arrangement of organizations is displayed
+This new hierarchical arrangement of organizations and groups is displayed
 using templates in this extension, instead of the usual list:
 ![Screenshot of organizations page](screenshots/orgs_page.png)
 
-Provides a new field on the organization edit form to select a parent
+Provides a new field on the organization and group edit form to select a parent
 organization:
 ![Screenshot of organization edit page](screenshots/org_edit.png)
 
@@ -26,10 +26,14 @@ When viewing an organization you see its context within the tree in the side bar
 Forms (hierachy_form plugin):
 * /organization/new
 * /organization/edit/{id}
+* /group/new
+* /group/edit/{id}
 
 Templates (hierarchy_display plugin):
 * /organization - now shows the organization hierarchy instead of list
 * /organization/about/{id} - now also shows the relevant part of the hierarchy
+* /group - now shows the group hierarchy instead of list
+* /group/about/{id} - now also shows the relevant part of the hierarchy
 
 Snippets (used by hierarchy_display and ckanext-scheming):
 * /scheming/form_snippets/org_hierarchy.html
@@ -37,12 +41,12 @@ Snippets (used by hierarchy_display and ckanext-scheming):
 You can use this extension with CKAN as it is, enabling both plugins. Or if you
 use an extension to customise the form already with an IGroupForm, then you
 will want to only use the hierarchy_display plugin, and copy bits of the
-hierarchy_form into your own. If you have your own templates then you can use
+hierarchy_form and/or hierarchy_group_form into your own. If you have your own templates then you can use
 the snippets (or logic functions) that this extension provides to display the
 trees.
 
 In order to make hierarchy work with ckanext-scheming you need to enable just
-hierarchy_display and then use corresponding form_snippet in your org_schema.
+hierarchy_display and then use corresponding form_snippet in your org_schema or group_schema.
 For example, you may add next field:
 ```
 {
@@ -89,14 +93,14 @@ To install ckanext-hierarchy:
        pip install -e "git+https://github.com/davidread/ckanext-hierarchy.git#egg=ckanext-hierarchy"
        pip install -r ckanext-hierarchy/requirements.txt
 
-3. Add ``hierarchy_display`` and ``hierarchy_form`` to the ``ckan.plugins`` setting in your CKAN
+3. Add ``hierarchy_display``, ``hierarchy_form`` and/or ``hierarchy_group_form`` to the ``ckan.plugins`` setting in your CKAN
    config file (by default the config file is located at
    ``/etc/ckan/default/production.ini``). Note that hierarchy_display
-should come before hierarchy_form
+should come before hierarchy_form and hierarchy_group_form
 
    e.g.:
 
-       ckan.plugins = stats text_view recline_view ... hierarchy_display hierarchy_form
+       ckan.plugins = stats text_view recline_view ... hierarchy_display hierarchy_form hierarchy_group_form
 
 4. Restart CKAN. For example if you've deployed CKAN with Apache on Ubuntu:
 

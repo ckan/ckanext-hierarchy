@@ -19,7 +19,7 @@ Example:
 
 <ul class="hierarchy-tree-top">
   {% for node in top_nodes recursive %}
-      {% set longname = h.group_tree_get_longname(node.name) %}
+      {% set longname = h.group_tree_get_longname(node.name, type_='organization') %}
       {% set display_text = node.title %}
       {% if use_longnames and longname%}
           {% set display_text = longname + " (" + display_text + ")" %}

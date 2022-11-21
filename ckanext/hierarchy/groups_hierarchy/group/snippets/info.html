@@ -1,0 +1,11 @@
+{% ckan_extends %}
+
+{% if group_dict is not defined %}{% set group_dict = g.group_dict %}{% endif %}
+
+{% block description %}
+    {{ super() }}
+    {% if group_dict %}
+        <hr>
+        {% snippet 'group/snippets/group_tree.html', top_nodes=[h.group_tree_section(id_=group_dict.id, type_=group_dict.type, include_siblings=False)], use_shortnames=True %}
+    {% endif %}
+{% endblock %}

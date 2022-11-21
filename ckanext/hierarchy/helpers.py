@@ -47,26 +47,26 @@ def group_tree_section(id_, type_='organization', include_parents=True,
 
 
 def group_tree_parents(id_, type_='organization'):
-    tree_node = p.toolkit.get_action('organization_show')({}, {'id': id_,
-                                                               'include_dataset_count': False,
-                                                               'include_users': False,
-                                                               'include_followers': False,
-                                                               'include_tags': False})
+    tree_node = p.toolkit.get_action(type_+'_show')({}, {'id': id_,
+                                                         'include_dataset_count': False,
+                                                         'include_users': False,
+                                                         'include_followers': False,
+                                                         'include_tags': False})
     if (tree_node['groups']):
         parent_id = tree_node['groups'][0]['name']
         parent_node = \
-            p.toolkit.get_action('organization_show')({}, {'id': parent_id})
+            p.toolkit.get_action(type_+'_show')({}, {'id': parent_id})
         return group_tree_parents(parent_id) + [parent_node]
     else:
         return []
 
 
 def group_tree_get_longname(id_, default="", type_='organization'):
-    tree_node = p.toolkit.get_action('organization_show')({}, {'id': id_,
-                                                               'include_dataset_count': False,
-                                                               'include_users': False,
-                                                               'include_followers': False,
-                                                               'include_tags': False})
+    tree_node = p.toolkit.get_action(type_+'_show')({}, {'id': id_,
+                                                         'include_dataset_count': False,
+                                                         'include_users': False,
+                                                         'include_followers': False,
+                                                         'include_tags': False})
     longname = tree_node.get("longname", default)
     if not longname:
         return default
@@ -93,10 +93,10 @@ def get_allowable_parent_groups(group_id):
     if group_id:
         group = model.Group.get(group_id)
         allowable_parent_groups = \
-            group.groups_allowed_to_be_its_parent(type='organization')
+            group.groups_allowed_to_be_its_parent(type=group.type)
     else:
         allowable_parent_groups = model.Group.all(
-            group_type='organization')
+            group_type=p.toolkit.get_endpoint()[0])
     return allowable_parent_groups
 
 
