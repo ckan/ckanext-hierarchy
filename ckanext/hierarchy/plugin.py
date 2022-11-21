@@ -175,7 +175,13 @@ class HierarchyForm(p.SingletonPlugin, DefaultOrganizationForm):
 
 
 class HierarchyGroupForm(p.SingletonPlugin, DefaultGroupForm):
+    p.implements(p.IConfigurer, inherit=True)
     p.implements(p.IGroupForm, inherit=True)
+
+    # IConfigurer
+
+    def update_config(self, config):
+        p.toolkit.add_template_directory(config, 'groups_hierarchy')
 
     # IGroupForm
 
