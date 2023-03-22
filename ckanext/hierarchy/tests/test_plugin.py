@@ -44,7 +44,7 @@ class TestOrgPage():
             status=200,
         )
 
-        assert child_org["title"] in response.body
+        assert str(child_org["title"]) in response.body
 
     def test_org_home(self, initial_data, app):
         """ Test the org home view works and show the child org """
@@ -55,7 +55,7 @@ class TestOrgPage():
             status=200,
         )
 
-        assert child_org["title"] in response.body
+        assert str(child_org["title"]) in response.body
 
 
 def scrape_search_results(response):
