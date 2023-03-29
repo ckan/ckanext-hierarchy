@@ -7,6 +7,6 @@
     {{ super() }}
     {% if include_children_option %}
         {% set group_type = c.group_dict.type.title() %}
-        {{ form.checkbox('include_children', label="Include Sub-"+group_type, checked=(h.is_include_children_selected()), value=True, error=error) }}
+        {{ form.checkbox('include_children', label="Include Sub-"+group_type+"s", checked=(h.is_include_children_selected()), value=True, error=error) }}
     {% endif %}
 {% endblock %}
