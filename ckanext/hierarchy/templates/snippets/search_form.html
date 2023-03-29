@@ -6,8 +6,7 @@
 {% block search_input %}
     {{ super() }}
     {% if include_children_option %}
-        {% if c.group_dict.type == "organization" %}{% set group_type = "Organizations"%}{% endif %}
-        {% if c.group_dict.type == "group" %}{% set group_type = "Groups"%}{% endif %}
+        {% set group_type = c.group_dict.type.title() %}
         {{ form.checkbox('include_children', label="Include Sub-"+group_type, checked=(h.is_include_children_selected()), value=True, error=error) }}
     {% endif %}
 {% endblock %}
