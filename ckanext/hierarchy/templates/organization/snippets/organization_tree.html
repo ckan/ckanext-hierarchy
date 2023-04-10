@@ -14,8 +14,9 @@ Example:
 
 #}
 
-{% set type = 'asset' if h.ckan_version().split('.')[1] | int >= 9 else 'resource' %}
-{% include 'hierarchy/snippets/hierarchy_' ~ type ~ '.html' %}
+{% set ckan_min_ver = h.ckan_version().split('.')[1] %}
+{% set file_type = 'asset' if ckan_min_ver|int >= 9 else 'resource' %}
+{% include 'hierarchy/snippets/hierarchy_' ~ file_type ~ '.html' %}
 
 <ul class="hierarchy-tree-top">
   {% for node in top_nodes recursive %}
