@@ -1,3 +1,4 @@
+from ckan.plugins import toolkit
 import ckan.plugins as p
 import ckan.model as model
 from ckan.common import request, is_flask_request
@@ -46,27 +47,45 @@ def group_tree_section(id_, type_='organization', include_parents=True,
         {'id': id_, 'type': type_, })
 
 
+def get_group_type_show(type_):
+    """ User with custom group types will be able to
+        use a "custom_type_show" action or the base action organization_show
+        for each new group type."""
+    custom_show_action = toolkit.config.get(
+        'ckanext.hierarchy.group_type_show_action.{}'.format(type_)
+    )
+    return custom_show_action or '{}_show'.format(type_)
+
+
 def group_tree_parents(id_, type_='organization'):
-    tree_node = p.toolkit.get_action(type_+'_show')({}, {'id': id_,
-                                                         'include_dataset_count': False,
-                                                         'include_users': False,
-                                                         'include_followers': False,
-                                                         'include_tags': False})
+    show_fn = get_group_type_show(type_)
+    data_dict = {
+        'id': id_,
+        'include_dataset_count': False,
+        'include_users': False,
+        'include_followers': False,
+        'include_tags': False
+    }
+    tree_node = p.toolkit.get_action(show_fn)({}, data_dict)
     if (tree_node['groups']):
         parent_id = tree_node['groups'][0]['name']
         parent_node = \
-            p.toolkit.get_action(type_+'_show')({}, {'id': parent_id})
+            p.toolkit.get_action(show_fn)({}, {'id': parent_id})
         return group_tree_parents(parent_id) + [parent_node]
     else:
         return []
 
 
 def group_tree_get_longname(id_, default="", type_='organization'):
-    tree_node = p.toolkit.get_action(type_+'_show')({}, {'id': id_,
-                                                         'include_dataset_count': False,
-                                                         'include_users': False,
-                                                         'include_followers': False,
-                                                         'include_tags': False})
+    show_fn = get_group_type_show(type_)
+    data_dict = {
+        'id': id_,
+        'include_dataset_count': False,
+        'include_users': False,
+        'include_followers': False,
+        'include_tags': False
+    }
+    tree_node = p.toolkit.get_action(show_fn)({}, data_dict)
     longname = tree_node.get("longname", default)
     if not longname:
         return default
