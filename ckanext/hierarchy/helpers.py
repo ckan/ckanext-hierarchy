@@ -1,4 +1,3 @@
-from ckan.plugins import toolkit
 import ckan.plugins as p
 import ckan.model as model
 from ckan.common import request, is_flask_request
