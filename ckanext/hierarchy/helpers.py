@@ -47,18 +47,13 @@ def group_tree_section(id_, type_='organization', include_parents=True,
         {'id': id_, 'type': type_, })
 
 
-def get_group_type_show(type_):
-    """ User with custom group types will be able to
-        use a "custom_type_show" action or the base action organization_show
-        for each new group type."""
-    custom_show_action = toolkit.config.get(
-        'ckanext.hierarchy.group_type_show_action.{}'.format(type_)
-    )
-    return custom_show_action or '{}_show'.format(type_)
+def _get_action_name(group_id):
+    model_obj = model.Group.get(group_id)
+    return "organization_show" if model_obj.is_organization else "group_show"
 
 
 def group_tree_parents(id_, type_='organization'):
-    show_fn = get_group_type_show(type_)
+    action_name = _get_action_name(id_)
     data_dict = {
         'id': id_,
         'include_dataset_count': False,
@@ -66,18 +61,18 @@ def group_tree_parents(id_, type_='organization'):
         'include_followers': False,
         'include_tags': False
     }
-    tree_node = p.toolkit.get_action(show_fn)({}, data_dict)
+    tree_node = p.toolkit.get_action(action_name)({}, data_dict)
     if (tree_node['groups']):
         parent_id = tree_node['groups'][0]['name']
         parent_node = \
-            p.toolkit.get_action(show_fn)({}, {'id': parent_id})
+            p.toolkit.get_action(action_name)({}, {'id': parent_id})
         return group_tree_parents(parent_id) + [parent_node]
     else:
         return []
 
 
 def group_tree_get_longname(id_, default="", type_='organization'):
-    show_fn = get_group_type_show(type_)
+    action_name = _get_action_name(id_)
     data_dict = {
         'id': id_,
         'include_dataset_count': False,
@@ -85,7 +80,7 @@ def group_tree_get_longname(id_, default="", type_='organization'):
         'include_followers': False,
         'include_tags': False
     }
-    tree_node = p.toolkit.get_action(show_fn)({}, data_dict)
+    tree_node = p.toolkit.get_action(action_name)({}, data_dict)
     longname = tree_node.get("longname", default)
     if not longname:
         return default
