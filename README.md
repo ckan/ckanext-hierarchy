@@ -108,19 +108,7 @@ should come before hierarchy_form and hierarchy_group_form
 
 ## Config settings
 
-### Custom group_type_show_action
-
-If you use custom group types you'll need to define which `show`
-action to use for each group type. For example, if you have a
-group type called `country` you'll need to create a new action
-called `country_show` in you extension. This is the default behaviour
-and in this case you don't need to add any settings to your config file.  
-On the contrary, if you prefer to continue using the base action `organization_show`
-you'll need to add the following setting to your config file:
-
-    ckanext.hierarchy.group_type_show_action.country = organization_show
-
-You can define a different action for each group type.  
+None at present 
 
 ## Tests
 
