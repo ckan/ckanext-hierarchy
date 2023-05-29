@@ -51,7 +51,7 @@ def _get_action_name(group_id):
     return "organization_show" if model_obj.is_organization else "group_show"
 
 
-def group_tree_parents(id_, type_='organization'):
+def group_tree_parents(id_):
     action_name = _get_action_name(id_)
     data_dict = {
         'id': id_,
