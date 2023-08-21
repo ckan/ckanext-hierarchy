@@ -1,6 +1,6 @@
 import ckan.plugins as p
 import ckan.model as model
-from ckan.common import request, is_flask_request
+from ckan.common import request
 
 
 def group_tree(organizations=[], type_='organization'):
@@ -115,7 +115,14 @@ def get_allowable_parent_groups(group_id):
 
 def is_include_children_selected():
     include_children_selected = False
-    if is_flask_request():
-        if request.params.get('include_children'):
+
+    if p.toolkit.check_ckan_version(min_version="2.10"):
+        is_flask = True
+    else:
+        from ckan.common import is_flask_request
+        is_flask = is_flask_request()
+
+    if is_flask:
+        if request.args.get('include_children'):
             include_children_selected = True
     return include_children_selected
