@@ -1,8 +1,4 @@
-
-[![Travis CI status](https://travis-ci.org/davidread/ckanext-hierarchy.svg?branch=master)](https://travis-ci.org/davidread/ckanext-hierarchy)
-
-[![Latest version on pypi](https://img.shields.io/pypi/v/ckanext-hierarchy.svg)](https://pypi.org/project/ckanext-hierarchy/)
-
+[![Tests](https://github.com/ckan/ckanext-hierarchy/workflows/Tests/badge.svg)](https://github.com/ckan/ckanext-hierarchy/actions)
 [![License](https://img.shields.io/pypi/l/ckanext-hierarchy.svg)](https://pypi.org/project/ckanext-hierarchy/)
 
 
@@ -77,7 +73,20 @@ TODO:
 
 ## Requirements
 
-This extension requires CKAN v2.7 or later.
+This extension requires CKAN v2.7 or later.  
+Currently tested only with CKAN 2.10 and 2.11.
+
+Compatibility with core CKAN versions:
+
+| CKAN version    | Compatible?   |
+| --------------- | ------------- |
+| 2.9 and earlier | unmaintained  |
+| 2.10            | Yes           |
+| 2.11            | Yes           |
+
+
+Pypi version unmaintained: https://pypi.org/project/ckanext-hierarchy/  
+
 
 ## Installation
 
