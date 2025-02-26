@@ -1,5 +1,14 @@
 # CKAN Hierarchy extension Changelog
 
+## 1.2.2
+
+New features:
+ - Test for CKAN 2.11, drop support for CKAN 2.9 [#72](https://github.com/ckan/ckanext-hierarchy/pull/72)
+   + [#70](https://github.com/ckan/ckanext-hierarchy/pull/70)
+
+Bug fixes:
+ - Add missing webassets [#71](https://github.com/ckan/ckanext-hierarchy/pull/71)
+
 ## 1.2.1
 
 New features:
