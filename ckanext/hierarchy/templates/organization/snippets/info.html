@@ -1,10 +1,5 @@
 {% ckan_extends %}
 
-{#
-    For CKAN 2.11, the location of this template was moved to templates/organization/snippets/info.html
-    We preserve this file for backwards compatibility.
-#}
-
 {% if group_dict is not defined %}{% set group_dict = c.group_dict %}{% endif %}
 
 {% block heading %}
