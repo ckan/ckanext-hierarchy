@@ -99,7 +99,7 @@ To install ckanext-hierarchy:
 2. Install the ckanext-hierarchy Python package into your virtual environment:
 
        cd /usr/lib/ckan/default/src
-       pip install -e "git+https://github.com/davidread/ckanext-hierarchy.git#egg=ckanext-hierarchy"
+       pip install -e "git+https://github.com/ckan/ckanext-hierarchy.git#egg=ckanext-hierarchy"
        pip install -r ckanext-hierarchy/requirements.txt
 
 3. Add ``hierarchy_display``, ``hierarchy_form`` and/or ``hierarchy_group_form`` to the ``ckan.plugins`` setting in your CKAN
