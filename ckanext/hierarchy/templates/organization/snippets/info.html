@@ -1,5 +1,7 @@
 {% ckan_extends %}
 
+{%- set group_dict = group_dict or group or organization -%}
+
 {% if group_dict is not defined %}{% set group_dict = c.group_dict %}{% endif %}
 
 {% block heading %}
