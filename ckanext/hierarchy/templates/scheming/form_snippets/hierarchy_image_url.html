@@ -3,5 +3,7 @@
 {% set is_upload = data.image_url and not data.image_url.startswith('http') %}
 {% set is_url = data.image_url and data.image_url.startswith('http') %}
 
-{{ form.image_upload(data, errors, is_upload_enabled=h.uploads_enabled(), is_url=is_url, is_upload=is_upload) }}
+{# CKAN 2.12 expects the storage type, older versions take no argument #}
+{% set is_upload_enabled = h.uploads_enabled('group') if h.check_ckan_version('2.12') else h.uploads_enabled() %}
+{{ form.image_upload(data, errors, is_upload_enabled=is_upload_enabled, is_url=is_url, is_upload=is_upload) }}
 
