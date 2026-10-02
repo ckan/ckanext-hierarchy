@@ -98,10 +98,7 @@ class HierarchyDisplay(p.SingletonPlugin):
             # it's non-organization controller or CLI call
             return search_params
 
-        if tk.check_ckan_version("2.10"):
-            controller = tk.get_endpoint()[0]
-        else:
-            controller = g.controller
+        controller = tk.get_endpoint()[0]
 
         # e.g. search_params['q'] = u' owner_org:"id" include_children: "True"'
         query = search_params.get('q', '')

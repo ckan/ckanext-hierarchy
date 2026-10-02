@@ -73,16 +73,15 @@ TODO:
 
 ## Requirements
 
-This extension requires CKAN v2.7 or later.  
-Currently tested only with CKAN 2.10 and 2.11.
+Currently tested only with CKAN 2.11 and 2.12.
 
 Compatibility with core CKAN versions:
 
-| CKAN version    | Compatible?   |
-| --------------- | ------------- |
-| 2.9 and earlier | unmaintained  |
-| 2.10            | Yes           |
-| 2.11            | Yes           |
+| CKAN version     | Compatible?  |
+| ---------------- | ------------ |
+| 2.10 and earlier | unmaintained |
+| 2.11             | Yes          |
+| 2.12             | Yes          |
 
 
 Pypi version unmaintained: https://pypi.org/project/ckanext-hierarchy/  

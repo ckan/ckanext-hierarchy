@@ -115,14 +115,6 @@ def get_allowable_parent_groups(group_id):
 
 def is_include_children_selected():
     include_children_selected = False
-
-    if p.toolkit.check_ckan_version(min_version="2.10"):
-        is_flask = True
-    else:
-        from ckan.common import is_flask_request
-        is_flask = is_flask_request()
-
-    if is_flask:
-        if request.args.get('include_children'):
-            include_children_selected = True
+    if request.args.get('include_children'):
+        include_children_selected = True
     return include_children_selected
