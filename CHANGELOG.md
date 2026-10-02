@@ -1,5 +1,14 @@
 # CKAN Hierarchy extension Changelog
 
+## Unreleased
+
+New features:
+ - CKAN 2.12 support [#77](https://github.com/ckan/ckanext-hierarchy/pull/77)
+ - Drop support for CKAN 2.10 [#78](https://github.com/ckan/ckanext-hierarchy/pull/78)
+
+Bug fixes:
+ - Pass the storage type to `h.uploads_enabled` on CKAN 2.12 [#78](https://github.com/ckan/ckanext-hierarchy/pull/78)
+
 ## 1.2.2
 
 New features:
